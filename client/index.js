@@ -2,7 +2,6 @@ import _ from 'lodash';
 import keycodes from './lib/keycodes';
 import ParallaxLayer from './lib/Parallaxlayer';
 const PIXI = require('pixi.js');
-const koaws = require('koa-ws/client');
 
 var rootElement = document.getElementById('main');
 
