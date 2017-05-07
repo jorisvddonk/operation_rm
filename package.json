@@ -4,8 +4,16 @@
   "description": "A space shooter game in which you fight your own filesystem, inspired by Operation: Inner Space.",
   "main": "server.js",
   "scripts": {
+    "start": "./node_modules/.bin/nodemon -e js,html ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Joris van de Donk <jorisvddonk@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.2.0",
+    "koa-static": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }
