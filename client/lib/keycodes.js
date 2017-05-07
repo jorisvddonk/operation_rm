@@ -1,21 +1,37 @@
 import _ from 'lodash';
 
 export default function(element, keycodes) {
+  var aliases = {
+    "KeyW": "ArrowUp",
+    "KeyA": "ArrowLeft",
+    "KeyS": "ArrowDown",
+    "KeyD": "ArrowRight",
+  };
+
   var state = _.reduce(keycodes, function(memo, code){
     memo[code] = false;
     return memo;
   }, {});
 
+  var translateKey = function(code) {
+    if (aliases.hasOwnProperty(code)) {
+      return aliases[code];
+    }
+    return code;
+  }
+
   element.addEventListener('keydown', function(e){
-    if (state.hasOwnProperty(e.code)) {
-      state[e.code] = true;
+    var keyCode = translateKey(e.code);
+    if (state.hasOwnProperty(keyCode)) {
+      state[keyCode] = true;
       e.preventDefault();
       return false;
     }
   });
   element.addEventListener('keyup', function(e){
-    if (state.hasOwnProperty(e.code)) {
-      state[e.code] = false;
+    var keyCode = translateKey(e.code);
+    if (state.hasOwnProperty(keyCode)) {
+      state[keyCode] = false;
       return false;
     }
   });
