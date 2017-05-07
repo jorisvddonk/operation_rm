@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
-    "webpack": "^2.5.1"
+    "webpack": "^2.5.1",
+    "webpack-livereload-plugin": "^0.11.0"
   }
 }
