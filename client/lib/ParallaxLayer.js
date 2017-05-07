@@ -11,8 +11,8 @@ export default function(options) {
   var update = function() {
     if (texture.width !== 1 && rendererWidth && rendererHeight) {
       // create textures
-      var numHorizontal = Math.max(2, parseInt(rendererWidth / texture.width)+2);
-      var numVertical = Math.max(2, parseInt(rendererHeight / texture.height)+2);
+      var numHorizontal = Math.max(2, parseInt(rendererWidth / texture.width)+4);
+      var numVertical = Math.max(2, parseInt(rendererHeight / texture.height)+4);
       _.each(_.range(0, numHorizontal), function(x){
         _.each(_.range(0, numVertical), function(y){
           var sprite = new PIXI.Sprite(texture);
@@ -20,8 +20,8 @@ export default function(options) {
             x: x,
             y: y
           }
-          sprite.position.x = x * texture.width;
-          sprite.position.y = y * texture.height;
+          sprite.position.x = (x-1) * texture.width;
+          sprite.position.y = (y-1) * texture.height;
           container.addChild(sprite);
         });
       });
