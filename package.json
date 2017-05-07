@@ -1,0 +1,11 @@
+{
+  "name": "operation_rm",
+  "version": "0.0.1",
+  "description": "A space shooter game in which you fight your own filesystem, inspired by Operation: Inner Space.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joris van de Donk <jorisvddonk@gmail.com>",
+  "license": "MIT"
+}
