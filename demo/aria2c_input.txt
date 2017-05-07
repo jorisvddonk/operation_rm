@@ -1,0 +1,24 @@
+https://pixabay.com/en/videos/download/video-5269_tiny.mp4?attachment
+  out=fireworks.mp4
+  auto-file-renaming=false
+  continue=true
+https://pixabay.com/en/videos/download/video-3998_tiny.mp4?attachment
+  out=cliffs.mp4
+  auto-file-renaming=false
+  continue=true
+https://pixabay.com/en/videos/download/video-8822_tiny.mp4?attachment
+  out=duck.mp4
+  auto-file-renaming=false
+  continue=true
+https://pixabay.com/en/videos/download/video-5938_tiny.mp4?attachment
+  out=pigeons.mp4
+  auto-file-renaming=false
+  continue=true
+https://static.pexels.com/photos/325490/pexels-photo-325490.jpeg
+  out=hamster.jpg
+  auto-file-renaming=false
+  continue=true
+https://static.pexels.com/photos/20787/pexels-photo.jpg
+  out=cat.jpg
+  auto-file-renaming=false
+  continue=true

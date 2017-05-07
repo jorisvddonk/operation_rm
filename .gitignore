@@ -1,2 +1,4 @@
 node_modules/
 client/dist
+demo/*
+!demo/aria2c_input.txt

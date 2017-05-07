@@ -1,5 +1,9 @@
 Operation: RM is a space shooter game in which you fight your own filesystem, inspired by Operation: Inner Space.
 
+# Fetching demo files
+
+1. run `aria2c -i aria2c_input.txt` in the `demo` directory.
+
 # Running & developing the project
 
 1. Install all dependencies: `npm install`

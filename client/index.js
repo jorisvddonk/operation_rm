@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import keycodes from './lib/keycodes';
 import ParallaxLayer from './lib/Parallaxlayer';
+import File from './lib/File';
 const PIXI = require('pixi.js');
+var path = require('path');
 
 var rootElement = document.getElementById('main');
 
@@ -20,6 +22,37 @@ addParallaxLayer("assets/parallax_1_0.png", 4);
 addParallaxLayer("assets/parallax_2.png", 3);
 addParallaxLayer("assets/parallax_3.png", 2);
 addParallaxLayer("assets/parallax_4.png", 1);
+
+var addFile = function(fileoptions) {
+  var abspath = path.join('/data/demo', fileoptions.name);
+  var file = new File({
+    abspath: abspath,
+    filename: fileoptions.name
+  });
+  file.position.x = _.random(500);
+  file.position.y = _.random(500);
+  file.wire(app);
+}
+var addVideo = function(fileoptions) {
+  addFile(fileoptions); // todo implement correctly
+}
+var addImage = function(fileoptions) {
+  addFile(fileoptions); // todo implement correctly
+}
+
+fetch('/data/demo').then(function(res){
+  return res.json()
+}).then(function(filelist){
+  _.each(filelist, function(file) {
+    if (file.type === 'image') {
+      addImage(file);
+    } else if (file.type === 'video') {
+      addVideo(file);
+    } else {
+      addFile(file);
+    }
+  });
+})
 
 var ship = new PIXI.Sprite(PIXI.Texture.fromImage("assets/ship.png"));
 ship.position.x = 400;
