@@ -99,6 +99,10 @@ app.ticker.add(function(delta) {
     ship.state.velocity.x -= Math.sin(ship.rotation+Math.PI) * 0.1;
     ship.state.velocity.y += Math.cos(ship.rotation+Math.PI) * 0.1;
   }
+  if (keyState.ArrowDown) {
+    ship.state.velocity.x -= Math.sin(ship.rotation+Math.PI) * -0.05;
+    ship.state.velocity.y += Math.cos(ship.rotation+Math.PI) * -0.05;
+  }
   if (keyState.Space) {
     ship.shooter.shoot();
   }
