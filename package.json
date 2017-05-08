@@ -20,7 +20,8 @@
     "pixi.js": "^4.5.1",
     "read-chunk": "^2.0.0",
     "socket.io": "^1.7.4",
-    "socket.io-client": "^1.7.4"
+    "socket.io-client": "^1.7.4",
+    "vue": "^2.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",

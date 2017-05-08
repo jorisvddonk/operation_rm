@@ -13,3 +13,31 @@ body {
     margin: 0px;
     background: #333;
 }
+.loadavg {
+    background: rgba(255,255,255,0.1);
+    border: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.5);
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    
+    
+    list-style: none;
+    padding: 1px;
+    margin: 0px;
+}
+.loadavg:before {
+    content: 'system load average:';
+    margin-right: 5px;
+}
+.loadavg li {
+    color: rgba(255,255,255,0.8);
+    display: inline-block;
+}
+.loadavg li:after {
+    content: ', ';
+    margin-right: 2px;
+}
+.loadavg li:last-child:after {
+    content: '';
+}

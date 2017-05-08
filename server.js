@@ -9,6 +9,7 @@ const app = new Koa();
 const router = new Router();
 const stream = require('stream');
 const path = require('path');
+const os = require('os');
 const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 
@@ -85,6 +86,9 @@ io.on('connection', function(client){
     io.to('players').send('Test!');
   }, 1000);
 });
+setInterval(function(){
+  io.to('players').emit('loadavg', os.loadavg());
+}, 1000);
 
 var startServer = function() {
   console.log("Starting server...");

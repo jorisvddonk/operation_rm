@@ -9,5 +9,10 @@ module.exports = {
   },
   plugins: [
     new LiveReloadPlugin({appendScriptTag: true})
-  ]
+  ],
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    }
+  }
 };

@@ -1,9 +1,17 @@
 <html>
   <head>
     <link rel="stylesheet" href="main.css"/>
+    <script type="text/x-template" id="loadavg">
+      <ul class="loadavg">
+        <li v-for="l in load">{{l}}</li>
+      </ul>
+    </script>
   </head>
   <body style="display:flex;justify-content:center;align-items:center;">
     <div id="main" style="width:800px;height:600px;"></div>
+    <div id="vue">
+      <loadavg v-bind:load="load"/>
+    </div>
     <script src='dist/bundle.js'></script>
   </body>
 </html>

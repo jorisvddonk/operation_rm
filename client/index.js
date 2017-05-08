@@ -4,6 +4,7 @@ import ParallaxLayer from './lib/Parallaxlayer';
 import File from './lib/File';
 import Bullet from './lib/Bullet';
 import Shooter from './lib/Shooter';
+import Vue from 'vue';
 const PIXI = require('pixi.js');
 var path = require('path');
 
@@ -131,6 +132,27 @@ socket.on('connect', function(x){
   console.log("Connected to Socket.IO backend"); 
 });
 socket.on('message', function(data){console.log("MSG", data)});
+socket.on('loadavg', function(data){
+  vue_app.load = data;
+});
 socket.on('disconnect', function(){
   console.log("Disconnected from Socket.IO backend");
 });
+
+
+Vue.component('loadavg', {
+  props: ['load'],
+  template: '#loadavg',
+  data: function(){
+    return {
+    }
+  }
+});
+var vue_app = new Vue({
+  el: '#vue',
+  data: {
+    load: null
+  },
+  mounted: function() {}
+});
+window.vue_app = vue_app;
