@@ -1,16 +1,31 @@
 <html>
   <head>
     <link rel="stylesheet" href="main.css"/>
+
     <script type="text/x-template" id="loadavg">
-      <ul class="loadavg">
+      <ul class="loadavg float-right">
         <li v-for="l in load">{{l}}</li>
       </ul>
+    </script>
+
+    <script type="text/x-template" id="hostname">
+      <span class="hostname float-left">{{hostname}}</span>
+    </script>
+
+    <script type="text/x-template" id="freemem">
+      <span class="freemem float-left">{{freemem}}</span>
     </script>
   </head>
   <body style="display:flex;justify-content:center;align-items:center;">
     <div id="main" style="width:800px;height:600px;"></div>
     <div id="vue">
-      <loadavg v-bind:load="load"/>
+      <div class="bottom-left">
+        <hostname v-bind:hostname="hostname"></hostname>
+        <freemem v-bind:freemem="freemem"></freemem>
+      </div>
+      <div class="bottom-right">
+        <loadavg v-bind:load="load"></loadavg>
+      </div>
     </div>
     <script src='dist/bundle.js'></script>
   </body>

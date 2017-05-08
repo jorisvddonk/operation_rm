@@ -81,13 +81,14 @@ io.on('connection', function(client){
   client.on('message', function(x){
     console.log("MSG", x)
   })
+  client.emit('hostname', os.hostname());
 
   setTimeout(function(){
     io.to('players').send('Test!');
   }, 1000);
 });
 setInterval(function(){
-  io.to('players').emit('loadavg', os.loadavg());
+  io.to('players').emit('loadavg', os.loadavg()).emit('freemem', os.freemem());
 }, 1000);
 
 var startServer = function() {

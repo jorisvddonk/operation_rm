@@ -135,6 +135,12 @@ socket.on('message', function(data){console.log("MSG", data)});
 socket.on('loadavg', function(data){
   vue_app.load = data;
 });
+socket.on('hostname', function(data){
+  vue_app.hostname = data;
+});
+socket.on('freemem', function(data){
+  vue_app.freemem = data;
+});
 socket.on('disconnect', function(){
   console.log("Disconnected from Socket.IO backend");
 });
@@ -148,10 +154,28 @@ Vue.component('loadavg', {
     }
   }
 });
+Vue.component('hostname', {
+  props: ['hostname'],
+  template: '#hostname',
+  data: function(){
+    return {
+    }
+  }
+});
+Vue.component('freemem', {
+  props: ['freemem'],
+  template: '#freemem',
+  data: function(){
+    return {
+    }
+  }
+});
 var vue_app = new Vue({
   el: '#vue',
   data: {
-    load: null
+    load: null,
+    hostname: null,
+    freemem: null
   },
   mounted: function() {}
 });
