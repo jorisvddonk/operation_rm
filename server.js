@@ -1,17 +1,16 @@
-var _ = require('lodash');
-var fileType = require('file-type');
-var readChunk = require('read-chunk');
+const _ = require('lodash');
+const fileType = require('file-type');
+const readChunk = require('read-chunk');
 const koaStatic = require('koa-static');
 const Koa = require('koa');
 const http = require('http');
-var Router = require('koa-router');
-var app = new Koa();
-var router = new Router();
-var stream = require('stream');
-
-var path = require('path');
-var fs = require('fs');
-var ffmpeg = require('fluent-ffmpeg');
+const Router = require('koa-router');
+const app = new Koa();
+const router = new Router();
+const stream = require('stream');
+const path = require('path');
+const fs = require('fs');
+const ffmpeg = require('fluent-ffmpeg');
 
 router.get('/data/:subpath*', function (ctx, next) {
   return new Promise(function(resolve, reject) {
@@ -73,9 +72,8 @@ app.use(koaStatic('client'));
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-var server = http.createServer(app.callback());
-
-var io = require('socket.io')(server);
+const server = http.createServer(app.callback());
+const io = require('socket.io')(server);
 io.on('connection', function(client){
   console.log("Received socketIO connection...")
   client.join('players');
