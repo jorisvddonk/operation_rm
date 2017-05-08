@@ -2,29 +2,34 @@ import _ from 'lodash';
 import keycodes from './lib/keycodes';
 import ParallaxLayer from './lib/Parallaxlayer';
 import File from './lib/File';
+import Bullet from './lib/Bullet';
+import Shooter from './lib/Shooter';
 const PIXI = require('pixi.js');
 var path = require('path');
 
 var rootElement = document.getElementById('main');
 
-var keyState = keycodes(window, ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"]);
+var keyState = keycodes(window, ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight", "Space"]);
 
 
 var app = new PIXI.Application(800, 600, {backgroundColor : 0x000000});
 rootElement.appendChild(app.view);
+window.app = app;
+app.topLayer = new PIXI.Container();
+app.middleLayer = new PIXI.Container();
+app.bottomLayer = new PIXI.Container();
+app.bullets = new PIXI.Container();
 
-var topLayer = new PIXI.Container();
-var middleLayer = new PIXI.Container();
-var bottomLayer = new PIXI.Container();
+app.stage.addChild(app.bottomLayer);
+app.stage.addChild(app.middleLayer);
+app.stage.addChild(app.bullets);
+app.stage.addChild(app.topLayer);
 
-app.stage.addChild(bottomLayer);
-app.stage.addChild(middleLayer);
-app.stage.addChild(topLayer);
 
 var addParallaxLayer = function(assetLocation, depth) {
   var layer = new ParallaxLayer({assetLocation: assetLocation, depth: depth})
   layer.wire(app);
-  bottomLayer.addChild(layer);
+  app.bottomLayer.addChild(layer);
 };
 
 addParallaxLayer("assets/parallax_1_0.png", 4);
@@ -41,7 +46,7 @@ var addFile = function(fileoptions) {
   file.position.x = _.random(500);
   file.position.y = _.random(500);
   file.wire(app);
-  middleLayer.addChild(file);
+  app.middleLayer.addChild(file);
 }
 var addVideo = function(fileoptions) {
   addFile(fileoptions); // todo implement correctly
@@ -74,7 +79,13 @@ ship.state = {
     y: 0
   }
 }
-topLayer.addChild(ship);
+app.topLayer.addChild(ship);
+
+ship.shooter = new Shooter(3, function() {
+  var bullet = new Bullet(ship.position.x, ship.position.y, ship.state.velocity.x, ship.state.velocity.y, ship.rotation + Math.random() * 0.03 - 0.015);
+  bullet.wire(app);
+});
+ship.shooter.wire(app);
 
 app.ticker.add(function(delta) {
   // Handle keypresses for ship
@@ -88,6 +99,9 @@ app.ticker.add(function(delta) {
     ship.state.velocity.x -= Math.sin(ship.rotation+Math.PI) * 0.1;
     ship.state.velocity.y += Math.cos(ship.rotation+Math.PI) * 0.1;
   }
+  if (keyState.Space) {
+    ship.shooter.shoot();
+  }
 
   // Update ship position
   ship.position.x += ship.state.velocity.x;
@@ -98,4 +112,11 @@ app.ticker.add(function(delta) {
   app.stage.pivot.y = ship.position.y;
   app.stage.position.x = app.renderer.width*0.5;
   app.stage.position.y = app.renderer.height*0.5;
+
+  // Move bullets
+  _.each(app.bullets.children, function(bullet) {
+    if (bullet) {
+      bullet.tick(delta);
+    }
+  })
 });
