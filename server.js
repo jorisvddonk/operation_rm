@@ -3,6 +3,7 @@ var fileType = require('file-type');
 var readChunk = require('read-chunk');
 const koaStatic = require('koa-static');
 const Koa = require('koa');
+const http = require('http');
 var Router = require('koa-router');
 var app = new Koa();
 var router = new Router();
@@ -71,4 +72,26 @@ router.get('/data/:subpath*', function (ctx, next) {
 app.use(koaStatic('client'));
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen(8099);
+
+var server = http.createServer(app.callback());
+
+var io = require('socket.io')(server);
+io.on('connection', function(client){
+  console.log("Received socketIO connection...")
+  client.join('players');
+  client.on('message', function(x){
+    console.log("MSG", x)
+  })
+
+  setTimeout(function(){
+    io.to('players').send('Test!');
+  }, 1000);
+});
+
+var startServer = function() {
+  console.log("Starting server...");
+  server.listen(8099, function() {
+    console.log("Server listening on port 8099...");
+  })
+};
+startServer();
