@@ -31,7 +31,6 @@ export default function(options) {
   texture.on('update', update);
   
   container.wire = function(app) {
-    app.stage.addChild(container);
     rendererWidth = app.renderer.width;
     rendererHeight = app.renderer.height;
     app.ticker.add(function(delta) {

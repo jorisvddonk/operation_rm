@@ -13,9 +13,18 @@ var keyState = keycodes(window, ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRigh
 var app = new PIXI.Application(800, 600, {backgroundColor : 0x000000});
 rootElement.appendChild(app.view);
 
+var topLayer = new PIXI.Container();
+var middleLayer = new PIXI.Container();
+var bottomLayer = new PIXI.Container();
+
+app.stage.addChild(bottomLayer);
+app.stage.addChild(middleLayer);
+app.stage.addChild(topLayer);
+
 var addParallaxLayer = function(assetLocation, depth) {
   var layer = new ParallaxLayer({assetLocation: assetLocation, depth: depth})
   layer.wire(app);
+  bottomLayer.addChild(layer);
 };
 
 addParallaxLayer("assets/parallax_1_0.png", 4);
@@ -32,6 +41,7 @@ var addFile = function(fileoptions) {
   file.position.x = _.random(500);
   file.position.y = _.random(500);
   file.wire(app);
+  middleLayer.addChild(file);
 }
 var addVideo = function(fileoptions) {
   addFile(fileoptions); // todo implement correctly
@@ -64,7 +74,7 @@ ship.state = {
     y: 0
   }
 }
-app.stage.addChild(ship);
+topLayer.addChild(ship);
 
 app.ticker.add(function(delta) {
   // Handle keypresses for ship

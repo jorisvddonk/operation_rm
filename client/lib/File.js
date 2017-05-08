@@ -12,7 +12,7 @@ export default function(options) {
   container.addChild(text);
   
   container.wire = function(app) {
-    app.stage.addChild(container);
+    // nothing needed here so far!
   }
   return container;
 };
