@@ -120,10 +120,11 @@ app.ticker.add(function(delta) {
 
   /*
   Handle bullets and hit detection.
-  This happens in three stages:
+  This happens in a few stages:
   1) Move all bullets and test if they've hit any files. If so; register the hit and mark the bullet as deceased
   2) Destroy all bullets that have deceased
-  3) Destroy all files that have been damaged to obadly
+  3) Update graphics for all files (show damage correctly)
+  4) Destroy all files that have been damaged to obadly
 
   The actual hit detection is rather basic and naïve. It's a simple point-box test between ALL bullets and ALL files.
   As there are probably not that many bullets active at any given point, and the number of files is probably not that great, this should be okay for now.
