@@ -113,10 +113,8 @@ app.ticker.add(function(delta) {
   ship.position.y += ship.state.velocity.y;
 
   // center ship in stage
-  app.stage.pivot.x = ship.position.x;
-  app.stage.pivot.y = ship.position.y;
-  app.stage.position.x = app.renderer.width*0.5;
-  app.stage.position.y = app.renderer.height*0.5;
+  app.stage.pivot.x = ship.position.x - app.renderer.width*0.5;
+  app.stage.pivot.y = ship.position.y - app.renderer.height*0.5;
 
   // Move bullets
   _.each(app.bullets.children, function(bullet) {
