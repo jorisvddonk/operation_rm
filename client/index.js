@@ -125,6 +125,10 @@ app.ticker.add(function(delta) {
   2) Destroy all bullets that have deceased
   3) Destroy all files that have been damaged to obadly
 
+  The actual hit detection is rather basic and naïve. It's a simple point-box test between ALL bullets and ALL files.
+  As there are probably not that many bullets active at any given point, and the number of files is probably not that great, this should be okay for now.
+  An easy way of improving this would be to divide the game world up into sectors and only checking for hit detections within a sector and its eight neighbors.
+
   Unfortunately, this code is unnecessarily messy. This is mostly because of the way PIXI.JS works:
   * When a Container is destroyed, it's cleaned up entirely, meaning that any references you might still have to it will error out with an NPE if you try to access properties like `position.x`.
   * When a Container is destroyed, it's removed from the `children` array of its parent in two phases: 
