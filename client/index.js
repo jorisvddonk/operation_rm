@@ -155,6 +155,10 @@ app.ticker.add(function(delta) {
       bullet.lifetimeTick(delta);
     }
   });
+  // Update gfx for all files
+  _.each(app.files.children, function(file) {
+    file.gfxTick();
+  });
   // Destroy all files that have been damaged too badly
   _.each(app.files.children, function(file) {
     if (file) {
