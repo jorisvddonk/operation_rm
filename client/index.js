@@ -20,10 +20,12 @@ app.topLayer = new PIXI.Container();
 app.middleLayer = new PIXI.Container();
 app.bottomLayer = new PIXI.Container();
 app.bullets = new PIXI.Container();
+app.files = new PIXI.Container();
 
 app.stage.addChild(app.bottomLayer);
 app.stage.addChild(app.middleLayer);
 app.stage.addChild(app.bullets);
+app.stage.addChild(app.files);
 app.stage.addChild(app.topLayer);
 
 
@@ -47,7 +49,7 @@ var addFile = function(fileoptions) {
   file.position.x = _.random(500);
   file.position.y = _.random(500);
   file.wire(app);
-  app.middleLayer.addChild(file);
+  app.files.addChild(file);
 }
 var addVideo = function(fileoptions) {
   addFile(fileoptions); // todo implement correctly
@@ -116,12 +118,45 @@ app.ticker.add(function(delta) {
   app.stage.pivot.x = ship.position.x - app.renderer.width*0.5;
   app.stage.pivot.y = ship.position.y - app.renderer.height*0.5;
 
-  // Move bullets
+  /*
+  Handle bullets and hit detection.
+  This happens in three stages:
+  1) Move all bullets and test if they've hit any files. If so; register the hit and mark the bullet as deceased
+  2) Destroy all bullets that have deceased
+  3) Destroy all files that have been damaged to obadly
+
+  Unfortunately, this code is unnecessarily messy. This is mostly because of the way PIXI.JS works:
+  * When a Container is destroyed, it's cleaned up entirely, meaning that any references you might still have to it will error out with an NPE if you try to access properties like `position.x`.
+  * When a Container is destroyed, it's removed from the `children` array of its parent in two phases: 
+    first, the reference is replaced with `undefined`, and after the current but before the next game tick all falsy values are removed ffrom the `children` array.
+    This means that if you *just* destroyed a Container and iterate through its parent's `children` array, you'll eventually hit `undefined`...
+    Naturally, this could be avoided by wrapping `app.{...}.children` in `_.compact`. Though this would result in cleaner code, it'd perform slower than what is actually implemented below.
+  */
   _.each(app.bullets.children, function(bullet) {
     if (bullet) {
-      bullet.tick(delta);
+      bullet.movementTick(delta);
+      _.each(app.files.children, function(file) {
+        const dx = Math.abs(bullet.position.x - file.position.x);
+        const dy = Math.abs(bullet.position.y - file.position.y);
+        if (dx < 20 && dy < 30) { // roughly the size of a file..
+          file.registerHit();
+          bullet.markDeceased();
+        }
+      });
     }
-  })
+  });
+  // Destroy all bullets that have 'deceased'
+  _.each(app.bullets.children, function(bullet) {
+    if (bullet) {
+      bullet.lifetimeTick(delta);
+    }
+  });
+  // Destroy all files that have been damaged too badly
+  _.each(app.files.children, function(file) {
+    if (file) {
+      file.lifetimeTick(delta);
+    }
+  });
 });
 
 

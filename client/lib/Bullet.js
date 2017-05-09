@@ -20,14 +20,19 @@ export default function(x, y, vx, vy, direction) {
   var destroy = function() {
     container.destroy();
   };
-  container.tick = function(delta) {
+  container.movementTick = function(delta) {
     container.position.x += container.state.velocity.x;
     container.position.y += container.state.velocity.y;
+  };
+  container.lifetimeTick = function(delta) {
     container.state.lifetime -= delta;
     if (container.state.lifetime < 0) {
       destroy();
     }
-  };
+  }
+  container.markDeceased = function() {
+    container.state.lifetime = 0;
+  }
   container.wire = function(app) {
     app.bullets.addChild(container);
   };

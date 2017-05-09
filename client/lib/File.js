@@ -14,5 +14,16 @@ export default function(options) {
   container.wire = function(app) {
     // nothing needed here so far!
   }
+  container.state = {
+    hitpoints: 10
+  }
+  container.lifetimeTick = function(delta) {
+    if (container.state.hitpoints <= 0) {
+      container.destroy();
+    }
+  }
+  container.registerHit = function() {
+    container.state.hitpoints -= 1;
+  }
   return container;
 };
