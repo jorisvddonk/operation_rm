@@ -9,12 +9,12 @@ export default class VideoFile extends File {
     var videoElement = document.createElement("video");
     videoElement.loop = true;
     videoElement.src = options.abspath;
-    var video = new PIXI.Sprite(PIXI.Texture.fromVideo(videoElement));
-    video.anchor.set(0.5);
-    this.addChildAt(video, 0);
+    this.video = new PIXI.Sprite(PIXI.Texture.fromVideo(videoElement));
+    this.video.anchor.set(0.5);
+    this.addChildAt(this.video, 0);
   }
 
   getHitboxSize() {
-    return {width: 35, height: 20}
+    return {width: this.video.width - 20, height: this.video.height - 20}
   }
 }
