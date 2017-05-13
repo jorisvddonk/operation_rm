@@ -11,6 +11,9 @@ export default class VideoFile extends File {
     videoElement.src = options.abspath;
     this.video = new PIXI.Sprite(PIXI.Texture.fromVideo(videoElement));
     this.video.anchor.set(0.5);
+    videoElement.addEventListener('error', () => {
+      this.video.texture = PIXI.Texture.fromImage("assets/file_error.png");
+    })
     this.addChildAt(this.video, 0);
   }
 
