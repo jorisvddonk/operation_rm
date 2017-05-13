@@ -28,7 +28,7 @@ export default class File extends PIXI.Container {
   wire() {
       // nothing needed here so far!
   }
-  
+
   gfxTick() {
     _.each(this.damageSprites.children, (sprite, i) => {
       sprite.visible = false;
@@ -46,5 +46,9 @@ export default class File extends PIXI.Container {
   
   registerHit() {
     this.state.hitpoints -= 1;
+  }
+
+  getHitboxSize() {
+    return {width: 30, height: 20}
   }
 }

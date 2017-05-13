@@ -143,7 +143,8 @@ app.ticker.add(function(delta) {
       _.each(app.files.children, function(file) {
         const dx = Math.abs(bullet.position.x - file.position.x);
         const dy = Math.abs(bullet.position.y - file.position.y);
-        if (dx < 20 && dy < 30) { // roughly the size of a file..
+        const hitboxSize = file.getHitboxSize();
+        if (dx < hitboxSize.width && dy < hitboxSize.height) {
           file.registerHit();
           bullet.markDeceased();
         }
