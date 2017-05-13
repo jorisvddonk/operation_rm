@@ -7,6 +7,9 @@ export default class ImageFile extends File {
     super(options);
     this.children[0].destroy(); // remove File image first..
     var texture = PIXI.Texture.fromImage(options.abspath);
+    texture.baseTexture.on('error', function() {
+      texture.baseTexture.updateSourceImage("assets/file_error.png");
+    });
     this.image = new PIXI.Sprite();
     texture.on('update', () => {
       if (texture.width >= texture.height) {
