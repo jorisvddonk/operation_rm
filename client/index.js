@@ -2,6 +2,7 @@ import _ from 'lodash';
 import keycodes from './lib/keycodes';
 import ParallaxLayer from './lib/Parallaxlayer';
 import File from './lib/File';
+import VideoFile from './lib/VideoFile';
 import Bullet from './lib/Bullet';
 import Shooter from './lib/Shooter';
 import Vue from 'vue';
@@ -52,7 +53,15 @@ var addFile = function(fileoptions) {
   app.files.addChild(file);
 }
 var addVideo = function(fileoptions) {
-  addFile(fileoptions); // todo implement correctly
+  var abspath = path.join('/data/demo', fileoptions.name);
+  var file = new VideoFile({
+    abspath: abspath,
+    filename: fileoptions.name
+  });
+  file.position.x = _.random(500);
+  file.position.y = _.random(500);
+  file.wire(app);
+  app.files.addChild(file);
 }
 var addImage = function(fileoptions) {
   addFile(fileoptions); // todo implement correctly
