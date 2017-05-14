@@ -84,11 +84,13 @@ var enterDirectory = function(dirPath) {
         add(new File(file));
       }
     });
-    add(new Folder({
-      name: '..',
-      type: 'folder',
-      relpath: path.dirname(dirPath)
-    }));
+    if (dirPath !== '.') {
+      add(new Folder({
+        name: '..',
+        type: 'folder',
+        relpath: path.dirname(dirPath)
+      }));
+    }
   });
 };
 
