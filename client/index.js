@@ -241,13 +241,23 @@ Vue.component('currentfolder', {
     }
   }
 });
+Vue.component('radar', {
+  props: ['files', 'ship'],
+  template: '#radar',
+  data: function(){
+    return {
+    }
+  }
+});
 var vue_app = new Vue({
   el: '#vue',
   data: {
     load: null,
     hostname: null,
     freemem: null,
-    currentfolder: ''
+    currentfolder: '',
+    files: app.files.children,
+    ship: app.ship
   },
   mounted: function() {}
 });

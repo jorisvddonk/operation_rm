@@ -15,7 +15,7 @@ body {
     margin: 0px;
     background: #333;
 }
-.loadavg, .hostname, .freemem, .currentfolder {
+.loadavg, .hostname, .freemem, .currentfolder, .radar {
     background: rgba(255,255,255,0.1);
     border: rgba(255,255,255,0.3);
     color: rgba(255,255,255,0.5);
@@ -98,4 +98,23 @@ body {
     content: 'Current folder:';
     margin-right: 5px;
     color: rgba(255,255,255,0.3);
+}
+
+.radar {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(30,30,30,0.7);
+    border: 1px solid rgba(255,255,255,0.3);
+    overflow: hidden;
+}
+.radar .blip {
+    border: 1px solid red;
+    width: 1px;
+    height: 1px;
+    position: absolute;
+}
+.radar .blip-ship {
+    border: 2px solid blue;
+    top: 100px;
+    left: 100px;
 }
