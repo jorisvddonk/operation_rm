@@ -8,6 +8,7 @@ import ImageFile from './lib/ImageFile';
 import Bullet from './lib/Bullet';
 import Shooter from './lib/Shooter';
 import Vue from 'vue';
+import seedrandom from 'seedrandom';
 const PIXI = require('pixi.js');
 var path = require('path');
 
@@ -44,8 +45,16 @@ addParallaxLayer("assets/parallax_3.png", 2);
 addParallaxLayer("assets/parallax_4.png", 1);
 
 var add = function(thing) {
-  var angle = Math.random() * 2 * Math.PI;
-  var distance = (Math.random() * 1000) + 200;
+  var angle;
+  var distance;
+  if (thing.filedetails.name === '..') { // always place the 'go up one folder' folder in a static position on the playing field
+    angle = 0;
+    distance = 100;
+  } else {
+    var rng = seedrandom(thing.filedetails.relpath);
+    angle = rng() * 2 * Math.PI;
+    distance = (rng() * 1000) + 200;
+  }
   thing.position.x = Math.sin(angle) * distance;
   thing.position.y = Math.cos(angle) * distance;
   thing.wire(app);
