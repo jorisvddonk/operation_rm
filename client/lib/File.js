@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import FileBase from './FileBase';
 const PIXI = require('pixi.js');
-export default class File extends PIXI.Container {
+export default class File extends FileBase {
   constructor(options) {
     super();
     var fileSprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/file.png"));
@@ -23,10 +24,6 @@ export default class File extends PIXI.Container {
     this.state = {
       hitpoints: 10
     }
-  }
-
-  wire() {
-      // nothing needed here so far!
   }
 
   gfxTick() {

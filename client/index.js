@@ -2,6 +2,7 @@ import _ from 'lodash';
 import keycodes from './lib/keycodes';
 import ParallaxLayer from './lib/Parallaxlayer';
 import File from './lib/File';
+import Folder from './lib/Folder';
 import VideoFile from './lib/VideoFile';
 import ImageFile from './lib/ImageFile';
 import Bullet from './lib/Bullet';
@@ -53,6 +54,17 @@ var addFile = function(fileoptions) {
   file.wire(app);
   app.files.addChild(file);
 }
+var addFolder = function(options) {
+  var abspath = path.join('/data/demo', options.name);
+  var folder = new Folder({
+    abspath: abspath,
+    foldername: options.name
+  });
+  folder.position.x = _.random(500);
+  folder.position.y = _.random(500);
+  folder.wire(app);
+  app.files.addChild(folder);
+}
 var addVideo = function(fileoptions) {
   var abspath = path.join('/data/demo', fileoptions.name);
   var file = new VideoFile({
@@ -84,6 +96,8 @@ fetch('/data/demo').then(function(res){
       addImage(file);
     } else if (file.type === 'video') {
       addVideo(file);
+    } else if (file.type === 'folder')  {
+      addFolder(file);
     } else {
       addFile(file);
     }
