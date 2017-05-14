@@ -1,4 +1,6 @@
-Operation RM is a space shooter game in which you fight your own filesystem, inspired by Operation: Inner Space.
+_For decades, file operations have been handled by operating system kernels. These workhorses of modern society have silently prevented our civilization from regressing into anarchy. However, times have changed, and malware has nested itself deeply within our filesystems, preventing kernels from doing their job. Now it is **your** duty to recursively remove all files from your PC, and prevent a global apocalypse of epic proportions. Welcome to **Operation RM**, operator._
+
+(Note: Operation RM does not actually make any modifications to your filesystem ([yet?](#1)))
 
 # Running & developing the game
 
@@ -29,4 +31,4 @@ Systems deviating from the above configuration may experience issues.
 # Running with a different game root
 
 By default, Operation RM is played from within the Operation RM directory, and you can't escape it ingame.
-To change the game's "root" folder, use the --root command line parameter, e.g. `npm start -- --root=C:\\` or `npm start -- --root=/`
+To change the game's "root" folder so that you can explore your entire filesystem, use the --root command line parameter, e.g. `npm start -- --root=C:\\` or `npm start -- --root=/`
