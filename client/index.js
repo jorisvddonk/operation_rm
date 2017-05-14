@@ -8,7 +8,7 @@ import ImageFile from './lib/ImageFile';
 import Bullet from './lib/Bullet';
 import Shooter from './lib/Shooter';
 import Vue from 'vue';
-import VueComponents from './lib/VueComponents'; // Vue components are added to the Vue instance.
+import VueComponents from './lib/VueComponents';
 import seedrandom from 'seedrandom';
 const PIXI = require('pixi.js');
 var path = require('path');
@@ -231,11 +231,11 @@ socket.on('disconnect', function(){
   console.log("Disconnected from Socket.IO backend");
 });
 
-
 // Setup VueJS application.
 // The VueJS application is responsible for rendering various widgets on screen (radar, hostname, load average, etc.)
 var vue_app = new Vue({
   el: '#vue',
+  components: VueComponents,
   data: {
     load: null,
     hostname: null,

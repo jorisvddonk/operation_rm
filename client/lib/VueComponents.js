@@ -1,28 +1,28 @@
 import Vue from 'vue';
 
-var loadavg = Vue.component('loadavg', {
+var loadavg = {
   props: ['load'],
   template: '#loadavg'
-});
+};
 
-var hostname = Vue.component('hostname', {
+var hostname = {
   props: ['hostname'],
   template: '#hostname'
-});
+};
 
-var freemem = Vue.component('freemem', {
+var freemem = {
   props: ['freemem'],
   template: '#freemem'
-});
+};
 
-var currentfolder = Vue.component('currentfolder', {
+var currentfolder = {
   props: ['currentfolder', 'isgameroot'],
   template: '#currentfolder'
-});
+};
 
-var radar = Vue.component('radar', {
+var radar = {
   props: ['files', 'shipposition'],
   template: '#radar'
-});
+};
 
-export {loadavg, hostname, freemem, currentfolder, radar};
+export default {loadavg, hostname, freemem, currentfolder, radar};
