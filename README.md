@@ -55,8 +55,9 @@ This game was developed and tested on the following system configuration:
 * Windows 10 (Creators Update)
 * NodeJS v7.1.0 (64-bit)
 * Chrome 58.0.3029.110 (64-bit)
+* ffmpeg version N-85750-ga75ef15
 
-Systems deviating from the above configuration may experience issues.
+Systems deviating from the above configuration may experience issues (though everything should Just Work (tm)). If you notice any errors, feel free to [file an issue](https://github.com/jorisvddonk/operation_rm/issues/new)!
 
 # Running with a different game root
 
