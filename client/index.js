@@ -44,8 +44,10 @@ addParallaxLayer("assets/parallax_3.png", 2);
 addParallaxLayer("assets/parallax_4.png", 1);
 
 var add = function(thing) {
-  thing.position.x = _.random(500);
-  thing.position.y = _.random(500);
+  var angle = Math.random() * 2 * Math.PI;
+  var distance = (Math.random() * 1000) + 200;
+  thing.position.x = Math.sin(angle) * distance;
+  thing.position.y = Math.cos(angle) * distance;
   thing.wire(app);
   app.files.addChild(thing);
 }
