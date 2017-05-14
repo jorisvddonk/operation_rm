@@ -6,7 +6,7 @@ export default class ImageFile extends File {
   constructor(options) {
     super(options);
     this.children[0].destroy(); // remove File image first..
-    var texture = PIXI.Texture.fromImage(options.abspath);
+    var texture = PIXI.Texture.fromImage(options.resource_path);
     texture.baseTexture.on('error', function() {
       texture.baseTexture.updateSourceImage("assets/file_error.png");
     });

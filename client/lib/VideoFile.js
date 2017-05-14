@@ -8,7 +8,7 @@ export default class VideoFile extends File {
     this.children[0].destroy(); // remove File image first..
     var videoElement = document.createElement("video");
     videoElement.loop = true;
-    videoElement.src = options.abspath;
+    videoElement.src = options.resource_path;
     this.video = new PIXI.Sprite(PIXI.Texture.fromVideo(videoElement));
     this.video.anchor.set(0.5);
     videoElement.addEventListener('error', () => {

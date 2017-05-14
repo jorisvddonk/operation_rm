@@ -43,66 +43,58 @@ addParallaxLayer("assets/parallax_2.png", 3);
 addParallaxLayer("assets/parallax_3.png", 2);
 addParallaxLayer("assets/parallax_4.png", 1);
 
-var addFile = function(fileoptions) {
-  var abspath = path.join('/data/demo', fileoptions.name);
-  var file = new File({
-    abspath: abspath,
-    filename: fileoptions.name
-  });
+var addFile = function(options) {
+  var file = new File(options);
   file.position.x = _.random(500);
   file.position.y = _.random(500);
   file.wire(app);
   app.files.addChild(file);
 }
 var addFolder = function(options) {
-  var abspath = path.join('/data/demo', options.name);
-  var folder = new Folder({
-    abspath: abspath,
-    foldername: options.name
-  });
+  var folder = new Folder(options);
   folder.position.x = _.random(500);
   folder.position.y = _.random(500);
   folder.wire(app);
   app.files.addChild(folder);
 }
-var addVideo = function(fileoptions) {
-  var abspath = path.join('/data/demo', fileoptions.name);
-  var file = new VideoFile({
-    abspath: abspath,
-    filename: fileoptions.name
-  });
+var addVideo = function(options) {
+  var file = new VideoFile(options);
   file.position.x = _.random(500);
   file.position.y = _.random(500);
   file.wire(app);
   app.files.addChild(file);
 }
-var addImage = function(fileoptions) {
-  var abspath = path.join('/data/demo', fileoptions.name);
-  var file = new ImageFile({
-    abspath: abspath,
-    filename: fileoptions.name
-  });
+var addImage = function(options) {
+  var file = new ImageFile(options);
   file.position.x = _.random(500);
   file.position.y = _.random(500);
   file.wire(app);
   app.files.addChild(file);
 }
 
-fetch('/data/demo').then(function(res){
-  return res.json()
-}).then(function(filelist){
-  _.each(filelist, function(file) {
-    if (file.type === 'image') {
-      addImage(file);
-    } else if (file.type === 'video') {
-      addVideo(file);
-    } else if (file.type === 'folder')  {
-      addFolder(file);
-    } else {
-      addFile(file);
-    }
+var enterDirectory = function(dirPath) {
+  fetch('/data/' + dirPath).then(function(res){
+    return res.json()
+  }).then(function(filelist){
+    _.each(filelist, function(file) {
+      file.relpath = path.join(dirPath, file.name);
+      file.resource_path = path.join('/data', file.relpath);
+      file.filename = file.name;
+      if (file.type === 'image') {
+        addImage(file);
+      } else if (file.type === 'video') {
+        addVideo(file);
+      } else if (file.type === 'folder')  {
+        addFolder(file);
+      } else {
+        addFile(file);
+      }
+    });
   });
-})
+};
+
+enterDirectory('demo');
+
 
 var ship = new PIXI.Sprite(PIXI.Texture.fromImage("assets/ship.png"));
 ship.position.x = 400;

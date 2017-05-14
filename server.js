@@ -16,6 +16,9 @@ const lwip = require('lwip');
 
 router.get('/data/:subpath*', function (ctx, next) {
   return new Promise(function(resolve, reject) {
+    if (!ctx.params.subpath) {
+      ctx.params.subpath = '';
+    }
     var pth = path.join(path.join(__dirname, '.'), ctx.params.subpath);
     try {
       var stats = fs.lstatSync(pth);
