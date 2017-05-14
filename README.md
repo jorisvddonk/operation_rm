@@ -28,6 +28,10 @@ The goal of the game is simple: remove as many files as possible by destroying t
 
 Currently, the main game loop is rather barebones, and there is no clear winning or losing state. See the [list of issues](https://github.com/jorisvddonk/operation_rm/issues) for potential future enhancements.
 
+## System architecture
+
+See [these docs](docs/system_architecture.md) for more info.
+
 # Running & developing the game
 
 First, ensure you have the following requirements installed:
