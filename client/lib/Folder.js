@@ -4,7 +4,7 @@ const PIXI = require('pixi.js');
 export default class Folder extends FileBase {
   constructor(options) {
     super(options);
-    this.folderSprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/folder.png"));
+    this.folderSprite = new PIXI.Sprite(PIXI.Texture.fromImage(`assets/folder${options.name === '..' ? '_up' : ''}.png`));
     this.folderSprite.anchor.set(0.5);
 
     var text = new PIXI.Text(options.name,{fontFamily : 'Arial', fontSize: 10, fill : 'white', align : 'center', stroke: 'black', strokeThickness: 2});

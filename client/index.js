@@ -78,7 +78,7 @@ var enterDirectory = function(dirPath) {
         add(new ImageFile(file));
       } else if (file.type === 'video') {
         add(new VideoFile(file));
-      } else if (file.type === 'folder')  {
+      } else if (file.type === 'folder' || file.type === 'folder_up')  {
         add(new Folder(file));
       } else {
         add(new File(file));
@@ -87,7 +87,7 @@ var enterDirectory = function(dirPath) {
     if (dirPath !== '.') {
       add(new Folder({
         name: '..',
-        type: 'folder',
+        type: 'folder_up',
         relpath: path.dirname(dirPath)
       }));
     }
