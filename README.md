@@ -1,10 +1,32 @@
+# Operation RM
+
 _For decades, file operations have been handled by operating system kernels. These workhorses of modern society have silently prevented our civilization from regressing into anarchy. However, times have changed, and malware has nested itself deeply within our filesystems, preventing kernels from doing their job. Now it is **your** duty to recursively remove all files from your PC, and prevent a global apocalypse of epic proportions. Welcome to **Operation RM**, operator._
+
+Operation RM is a game in which you explore your filesystem in order to destroy files.
 
 (Note: Operation RM does not actually make any modifications to your filesystem ([yet?](https://github.com/jorisvddonk/operation_rm/issues/1)))
 
 ![screenshot depicting cleansing of a nasty virus](docs/media/screenshot.png)
 
 ![video depicting cleansing of some nasty viruses](docs/media/gameplay.gif)
+
+## Goal of the game
+
+The goal of the game is simple: remove as many files as possible by destroying them!
+
+## Controls
+
+`Arrow keys` or `W/A/S/D` to move your spaceship around. `Space` to shoot.
+
+## Cool features
+
+* Explore your filesystem! Destroy files!
+* Videos are automatically transcoded by the backend server and streamed to the client. Transcoded videos are not stored on disk. Note, though, that navigating through folders with many videos in them [may currently cause performance issues](https://github.com/jorisvddonk/operation_rm/issues/3).
+* Images are automatically resized and sent to the client.
+
+## Current status and future development
+
+Currently, the main game loop is rather barebones, and there is no clear winning or losing state. See the [list of issues](https://github.com/jorisvddonk/operation_rm/issues) for potential future enhancements.
 
 # Running & developing the game
 
