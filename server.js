@@ -86,6 +86,8 @@ router.get('/data/:subpath*', function (ctx, next) {
         });
         command.on('error', function(err) {
           console.error(err);
+          ctx.status = 500;
+          ctx.body = "";
         });
         command.run();
         resolve();
