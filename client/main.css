@@ -123,6 +123,6 @@ body {
     top: 100px;
     left: 100px;
 }
-.radar .blip-folder {
+.radar .blip-folder, .radar .blip-folder_up {
     border: 1px solid lightyellow;
 }
