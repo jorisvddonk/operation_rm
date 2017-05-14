@@ -13,13 +13,21 @@ const os = require('os');
 const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 const lwip = require('lwip');
+const argv = require('yargs').argv;
+
+var GAME_ROOT = __dirname;
+if (_.isString(argv.root)) {
+  GAME_ROOT = argv.root;
+}
+GAME_ROOT = path.resolve(GAME_ROOT);
+console.log("Game root is", GAME_ROOT);
 
 router.get('/data/:subpath*', function (ctx, next) {
   return new Promise(function(resolve, reject) {
     if (!ctx.params.subpath) {
       ctx.params.subpath = '';
     }
-    var pth = path.join(path.join(__dirname, '.'), ctx.params.subpath);
+    var pth = path.join(path.join(GAME_ROOT, '.'), ctx.params.subpath);
     try {
       var stats = fs.lstatSync(pth);
     } catch (e) {
@@ -27,30 +35,34 @@ router.get('/data/:subpath*', function (ctx, next) {
     }
     if (stats.isDirectory()) {
       var details = fs.readdirSync(pth);
-      details = _.map(details, function(entry_name) {
-        var entry_path = path.join(pth, entry_name);
-        if (fs.lstatSync(entry_path).isFile()) {
-          var filetype = fileType(readChunk.sync(entry_path, 0, 100));
-          if (filetype !== null) {
-            if (filetype.mime.startsWith('video')) {
-              filetype = 'video';
-            } else if (filetype.mime.startsWith('image')) {
-              filetype = 'image';
-            } else {
-              filetype = filetype.mime;
+      details = _.compact(_.map(details, function(entry_name) {
+        try {
+          var entry_path = path.join(pth, entry_name);
+          if (fs.lstatSync(entry_path).isFile()) {
+            var filetype = fileType(readChunk.sync(entry_path, 0, 100));
+            if (filetype !== null) {
+              if (filetype.mime.startsWith('video')) {
+                filetype = 'video';
+              } else if (filetype.mime.startsWith('image')) {
+                filetype = 'image';
+              } else {
+                filetype = filetype.mime;
+              }
+            }
+            return {
+              name: entry_name,
+              type: filetype
+            }
+          } else {
+            return {
+              name: entry_name,
+              type: 'folder'
             }
           }
-          return {
-            name: entry_name,
-            type: filetype
-          }
-        } else {
-          return {
-            name: entry_name,
-            type: 'folder'
-          }
+        } catch (e) {
+          return undefined; // if the resource is busy or locked, ignore it completely.
         }
-      });
+      }));
       ctx.body = JSON.stringify(details);
       ctx.contentType = "application/json";
       resolve();
