@@ -19,4 +19,4 @@ The backend has a single file associated with it: `server.js`.
 
 # Client
 
-The Client of Operation RM is a game implemented using WebGL/Canvas and HTML/CSS, which uses the backend for (file)system access. The main entry points of the Client are `index.html` and `index.js`.
+The Client of Operation RM is a game implemented using WebGL/Canvas and HTML/CSS, which uses the backend for (file)system access. The main entry points of the Client are `client/index.html` and `client/index.js`.

@@ -37,7 +37,7 @@ See [these docs](docs/system_architecture.md) for more info.
 First, ensure you have the following requirements installed:
 
 * NodeJS v7.x.x
-* ffmpeg with support for encoding oggvorbis video. The ffmpeg binary needs to be in your `PATH`. Alternatively, you can set the `FFMPEG_PATH` environment variable to the absolute path to the ffmpeg binary.
+* (optional) ffmpeg with support for encoding oggvorbis video. The ffmpeg binary needs to be in your `PATH`. Alternatively, you can set the `FFMPEG_PATH` environment variable to the absolute path to the ffmpeg binary. If you haven't installed ffmpeg, you won't get to see videos being rendered in game!
 
 Once you have the requirements installed, this will get the game running for you:
 
