@@ -53,7 +53,7 @@ var add = function(thing) {
   } else {
     var rng = seedrandom(thing.filedetails.relpath);
     angle = rng() * 2 * Math.PI;
-    distance = (rng() * 1000) + 200;
+    distance = (rng() * 2000) + 200;
   }
   thing.position.x = Math.sin(angle) * distance;
   thing.position.y = Math.cos(angle) * distance;
