@@ -188,7 +188,7 @@ app.ticker.add(function(delta) {
 });
 
 
-var socket = require('socket.io-client')('http://127.0.0.1.xip.io:8099');
+var socket = require('socket.io-client')(window.location.href);
 socket.on('connect', function(x){
   console.log("Connected to Socket.IO backend"); 
 });
