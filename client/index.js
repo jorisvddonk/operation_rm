@@ -20,7 +20,6 @@ var keyState = keycodes(window, ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRigh
 // The PIXI Application is responsible for most of the game's workings and rendering.
 var app = new PIXI.Application(800, 600, {backgroundColor : 0x000000});
 document.getElementById('main').appendChild(app.view);
-window.app = app;
 
 // Setup layers containing game objects
 app.topLayer = new PIXI.Container();
@@ -263,7 +262,11 @@ var vue_app = new Vue({
     }
   }
 });
-window.vue_app = vue_app;
 
 // Finally, enter the root directory!
 enterDirectory('.');
+
+// Expose some variables onto the window for debugging / developing.
+window.vue_app = vue_app;
+window.app = app;
+window.socket = socket;
