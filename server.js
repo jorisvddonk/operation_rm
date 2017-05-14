@@ -62,13 +62,13 @@ router.get('/data/:subpath*', function (ctx, next) {
         command.run();
         resolve();
       } else if (filetype !== null && filetype.mime.startsWith('image')) {
+        ctx.contentType = filetype.mime;
         try {
           lwip.open(pth, function(err, image) {
             if (!err) {
               image.batch().cover(54, 54).toBuffer('jpg', {}, function(err, buf){
                 if (!err) {
                   ctx.body = buf;
-                  ctx.contentType = filetype.mime;
                 } else {
                   ctx.body = fs.createReadStream(pth);
                 }
