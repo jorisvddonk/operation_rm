@@ -34,18 +34,21 @@ app.stage.addChild(app.bullets);
 app.stage.addChild(app.files);
 app.stage.addChild(app.topLayer);
 
-
+// Add background parallax layers
 var addParallaxLayer = function(assetLocation, depth) {
   var layer = new ParallaxLayer({assetLocation: assetLocation, depth: depth})
   layer.wire(app);
   app.bottomLayer.addChild(layer);
 };
-
 addParallaxLayer("assets/parallax_1_0.png", 4);
 addParallaxLayer("assets/parallax_2.png", 3);
 addParallaxLayer("assets/parallax_3.png", 2);
 addParallaxLayer("assets/parallax_4.png", 1);
 
+/*
+ Add a game object ('thing') and place it pseudorandomly in the playing field.
+ Used in 'enterFolder' function below.
+*/
 var add = function(thing) {
   var angle;
   var distance;
@@ -59,11 +62,15 @@ var add = function(thing) {
   }
   thing.position.x = Math.sin(angle) * distance;
   thing.position.y = Math.cos(angle) * distance;
-  thing.wire(app);
+  thing.wire(app); // If the game object needs some extra wiring done with our app instance, it'll be able to do so now.
   app.files.addChild(thing);
-}
+};
 
-var enterDirectory = function(dirPath) {
+/*
+ Enter a new folder.
+ This will fetch the folder's contents from the backend and (re)set the state of the game accordingly.
+*/
+var enterFolder = function(dirPath) {
   vue_app.currentfolder = '';
   app.files.removeChildren();
   app.ship.position.x = 0;
@@ -75,7 +82,7 @@ var enterDirectory = function(dirPath) {
   }).then(function(details){
     vue_app.currentfolder = details.absolute_path;
     vue_app.isgameroot = details.is_root;
-    _.each(details.contents, function(file) {
+    _.each(details.contents, function(file) { // Iterate through the files in the folder and add the relevant game objects.
       file.relpath = path.join(dirPath, file.name);
       file.resource_path = path.join('/data', file.relpath);
       if (file.type === 'image') {
@@ -88,7 +95,7 @@ var enterDirectory = function(dirPath) {
         add(new File(file));
       }
     });
-    if (dirPath !== '.') {
+    if (dirPath !== '.') { // Add a 'go up' folder ('..') if the user is not in the game root folder.
       add(new Folder({
         name: '..',
         type: 'folder_up',
@@ -98,6 +105,7 @@ var enterDirectory = function(dirPath) {
   });
 };
 
+// Create the spaceship the user is going to fly!
 var ship = new PIXI.Sprite(PIXI.Texture.fromImage("assets/ship.png"));
 ship.position.x = 400;
 ship.position.y = 400;
@@ -107,7 +115,7 @@ ship.state = {
     x: 0,
     y: 0
   }
-}
+};
 app.ship = ship;
 app.topLayer.addChild(ship);
 
@@ -120,10 +128,10 @@ ship.shooter.wire(app);
 app.ticker.add(function(delta) {
   // Handle keypresses for ship
   if (keyState.ArrowLeft) {
-    ship.rotation -= 0.1
+    ship.rotation -= 0.1;
   }
   if (keyState.ArrowRight) {
-    ship.rotation += 0.1
+    ship.rotation += 0.1;
   }
   if (keyState.ArrowUp) {
     ship.state.velocity.x -= Math.sin(ship.rotation+Math.PI) * 0.1;
@@ -201,7 +209,7 @@ app.ticker.add(function(delta) {
       const dx = Math.abs(ship.position.x - file.position.x);
       const dy = Math.abs(ship.position.y - file.position.y);
       if (dx*dx+dy*dy < 1500) {
-        enterDirectory(file.filedetails.relpath);
+        enterFolder(file.filedetails.relpath);
       }
     }
   });
@@ -263,8 +271,8 @@ var vue_app = new Vue({
   }
 });
 
-// Finally, enter the root directory!
-enterDirectory('.');
+// Finally, enter the root folder!
+enterFolder('.');
 
 // Expose some variables onto the window for debugging / developing.
 window.vue_app = vue_app;
