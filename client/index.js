@@ -51,13 +51,18 @@ var add = function(thing) {
 }
 
 var enterDirectory = function(dirPath) {
+  vue_app.currentfolder = dirPath;
+  app.files.removeChildren();
+  app.ship.position.x = 0;
+  app.ship.position.y = 0;
+  app.ship.state.velocity.x = 0;
+  app.ship.state.velocity.y = 0;
   fetch('/data/' + dirPath).then(function(res){
     return res.json()
   }).then(function(filelist){
     _.each(filelist, function(file) {
       file.relpath = path.join(dirPath, file.name);
       file.resource_path = path.join('/data', file.relpath);
-      file.filename = file.name;
       if (file.type === 'image') {
         add(new ImageFile(file));
       } else if (file.type === 'video') {
@@ -68,11 +73,13 @@ var enterDirectory = function(dirPath) {
         add(new File(file));
       }
     });
+    add(new Folder({
+      name: '..',
+      type: 'folder',
+      relpath: path.dirname(dirPath)
+    }));
   });
 };
-
-enterDirectory('demo');
-
 
 var ship = new PIXI.Sprite(PIXI.Texture.fromImage("assets/ship.png"));
 ship.position.x = 400;
@@ -84,6 +91,7 @@ ship.state = {
     y: 0
   }
 }
+app.ship = ship;
 app.topLayer.addChild(ship);
 
 ship.shooter = new Shooter(3, function() {
@@ -169,8 +177,18 @@ app.ticker.add(function(delta) {
       file.lifetimeTick(delta);
     }
   });
-});
 
+  // Check if player ship is touching a folder; if so, enter it!
+  _.each(app.files.children, function(file) {
+    if (file instanceof Folder) {
+      const dx = Math.abs(ship.position.x - file.position.x);
+      const dy = Math.abs(ship.position.y - file.position.y);
+      if (dx*dx+dy*dy < 1500) {
+        enterDirectory(file.filedetails.relpath);
+      }
+    }
+  });
+});
 
 var socket = require('socket.io-client')(window.location.href);
 socket.on('connect', function(x){
@@ -215,13 +233,25 @@ Vue.component('freemem', {
     }
   }
 });
+Vue.component('currentfolder', {
+  props: ['currentfolder'],
+  template: '#currentfolder',
+  data: function(){
+    return {
+    }
+  }
+});
 var vue_app = new Vue({
   el: '#vue',
   data: {
     load: null,
     hostname: null,
-    freemem: null
+    freemem: null,
+    currentfolder: ''
   },
   mounted: function() {}
 });
 window.vue_app = vue_app;
+
+// Finally, enter the root directory!
+enterDirectory('.');

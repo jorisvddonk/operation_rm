@@ -3,6 +3,7 @@ const PIXI = require('pixi.js');
 export default class FileBase extends PIXI.Container {
   constructor(options) {
     super();
+    this.filedetails = options;
   }
 
   getHitboxSize() {

@@ -13,7 +13,7 @@ body {
     margin: 0px;
     background: #333;
 }
-.loadavg, .hostname, .freemem {
+.loadavg, .hostname, .freemem, .currentfolder {
     background: rgba(255,255,255,0.1);
     border: rgba(255,255,255,0.3);
     color: rgba(255,255,255,0.5);
@@ -23,6 +23,16 @@ body {
     margin: 0px;
 }
 
+.top-left {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.top-right {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
 .bottom-left {
     position: absolute;
     left: 0px;
@@ -77,4 +87,13 @@ body {
 }
 .loadavg li:last-child:after {
     content: '';
+}
+
+.currentfolder {
+    color: rgba(255,255,255,0.8);
+}
+.currentfolder:before {
+    content: 'Current folder:';
+    margin-right: 5px;
+    color: rgba(255,255,255,0.3);
 }

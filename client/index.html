@@ -2,6 +2,10 @@
   <head>
     <link rel="stylesheet" href="main.css"/>
 
+    <script type="text/x-template" id="currentfolder">
+      <span class="currentfolder float-left">{{currentfolder}}</span>
+    </script>
+
     <script type="text/x-template" id="loadavg">
       <ul class="loadavg float-right">
         <li v-for="l in load">{{l}}</li>
@@ -19,6 +23,9 @@
   <body style="display:flex;justify-content:center;align-items:center;">
     <div id="main" style="width:800px;height:600px;"></div>
     <div id="vue">
+      <div class="top-left">
+        <currentfolder v-bind:currentfolder="currentfolder"></currentfolder>
+      </div>
       <div class="bottom-left">
         <hostname v-bind:hostname="hostname"></hostname>
         <freemem v-bind:freemem="freemem"></freemem>

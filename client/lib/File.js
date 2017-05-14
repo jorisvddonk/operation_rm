@@ -3,7 +3,7 @@ import FileBase from './FileBase';
 const PIXI = require('pixi.js');
 export default class File extends FileBase {
   constructor(options) {
-    super();
+    super(options);
     var fileSprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/file.png"));
     fileSprite.anchor.set(0.5);
     this.damageSprites = new PIXI.Container();
@@ -14,7 +14,7 @@ export default class File extends FileBase {
       this.damageSprites.addChild(sprite);
     });
 
-    var text = new PIXI.Text(options.filename,{fontFamily : 'Arial', fontSize: 10, fill : 'white', align : 'center', stroke: 'black', strokeThickness: 2});
+    var text = new PIXI.Text(options.name,{fontFamily : 'Arial', fontSize: 10, fill : 'white', align : 'center', stroke: 'black', strokeThickness: 2});
     text.anchor.set(0.5);
     text.position.y = 40;
     this.addChild(fileSprite);
