@@ -24,21 +24,28 @@ router.get('/data/:subpath*', function (ctx, next) {
     }
     if (stats.isDirectory()) {
       var details = fs.readdirSync(pth);
-      details = _.map(details, function(filename) {
-        var filepath = path.join(pth, filename);
-        var filetype = fileType(readChunk.sync(filepath, 0, 100));
-        if (filetype !== null) {
-          if (filetype.mime.startsWith('video')) {
-            filetype = 'video';
-          } else if (filetype.mime.startsWith('image')) {
-            filetype = 'image';
-          } else {
-            filetype = filetype.mime;
+      details = _.map(details, function(entry_name) {
+        var entry_path = path.join(pth, entry_name);
+        if (fs.lstatSync(entry_path).isFile()) {
+          var filetype = fileType(readChunk.sync(entry_path, 0, 100));
+          if (filetype !== null) {
+            if (filetype.mime.startsWith('video')) {
+              filetype = 'video';
+            } else if (filetype.mime.startsWith('image')) {
+              filetype = 'image';
+            } else {
+              filetype = filetype.mime;
+            }
           }
-        }
-        return {
-          name: filename,
-          type: filetype
+          return {
+            name: entry_name,
+            type: filetype
+          }
+        } else {
+          return {
+            name: entry_name,
+            type: 'folder'
+          }
         }
       });
       ctx.body = JSON.stringify(details);
