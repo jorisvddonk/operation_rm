@@ -7,12 +7,12 @@ export default function(options) {
   var rendererWidth;
   var rendererHeight;
   var depthMultiplier = 1 / options.depth || 1;
-
+  
   var update = function() {
     if (texture.width !== 1 && rendererWidth && rendererHeight) {
       // create textures
-      var numHorizontal = Math.max(2, parseInt(rendererWidth / texture.width)+4);
-      var numVertical = Math.max(2, parseInt(rendererHeight / texture.height)+4);
+      var numHorizontal = Math.max(1, Math.ceil(rendererWidth / texture.width))+2;
+      var numVertical = Math.max(1, Math.ceil(rendererHeight / texture.height))+2;
       _.each(_.range(0, numHorizontal), function(x){
         _.each(_.range(0, numVertical), function(y){
           var sprite = new PIXI.Sprite(texture);
@@ -41,6 +41,12 @@ export default function(options) {
       // set offset
       container.pivot.x = (app.stage.pivot.x*depthMultiplier % texture.width) + (container.width*0.5 - texture.width*0.5);
       container.pivot.y = (app.stage.pivot.y*depthMultiplier % texture.height) + (container.height*0.5 - texture.height*0.5);
+      while (container.pivot.x > texture.width) {
+        container.pivot.x -= texture.width;
+      }
+      while (container.pivot.y > texture.height) {
+        container.pivot.y -= texture.height;
+      }
     });
     update();
   }
