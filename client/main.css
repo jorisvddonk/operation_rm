@@ -108,13 +108,16 @@ body {
     overflow: hidden;
 }
 .radar .blip {
-    border: 1px solid red;
+    border: 1px solid lightcoral;
     width: 1px;
     height: 1px;
     position: absolute;
 }
 .radar .blip-ship {
-    border: 2px solid blue;
+    border: 2px solid skyblue;
     top: 100px;
     left: 100px;
+}
+.radar .blip-folder {
+    border: 1px solid lightyellow;
 }
