@@ -1,0 +1,11 @@
+# Operation RM license details
+
+Operation RM code is licensed under the [MIT License](http://opensource.org/licenses/MIT) unless otherwise noted. Operation RM makes use of art assets from a variety of sources, each with its own license.
+
+The following authors have made art assets which are used in Operation RM:
+
+* [BTAxis; art assets for Naev. Public domain.](https://github.com/bobbens/naev/blob/master/dat/gfx/ARTWORK_LICENSE) (client/assets/parallax_1_0.png)
+* [Daniel Cook; art assets for Tyrian. Permissive license.](http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html) (client/assets/ship.png)
+* Joris van de Donk; variosu art assets. Public domain. (everything else in client/assets)
+
+All assets from the 'demo' folder are in the Public Domain and were retrieved from pixabay.com or pexels.com
