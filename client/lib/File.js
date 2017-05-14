@@ -30,6 +30,9 @@ export default class File extends FileBase {
     }
   }
 
+  /*
+  Update graphics of the file
+  */
   gfxTick() {
     _.each(this.damageSprites.children, (sprite, i) => {
       sprite.visible = false;
@@ -39,12 +42,21 @@ export default class File extends FileBase {
     })
   }
 
+  /*
+  Check if the file should be destroyed (if it's HP is lower or equal to zero)
+  Returns true if the file was destroyed; false otherwise.
+  */
   lifetimeTick(delta) {
     if (this.state.hitpoints <= 0) {
       this.destroy();
+      return true;
     }
+    return false;
   }
   
+  /*
+  Register a hit on this file
+  */
   registerHit() {
     this.state.hitpoints -= 1;
   }

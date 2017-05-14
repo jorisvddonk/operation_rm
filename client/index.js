@@ -83,16 +83,18 @@ var enterFolder = function(dirPath) {
     vue_app.currentfolder = details.absolute_path;
     vue_app.isgameroot = details.is_root;
     _.each(details.contents, function(file) { // Iterate through the files in the folder and add the relevant game objects.
-      file.relpath = path.join(dirPath, file.name);
-      file.resource_path = path.join('/data', file.relpath);
-      if (file.type === 'image') {
-        add(new ImageFile(file));
-      } else if (file.type === 'video') {
-        add(new VideoFile(file));
-      } else if (file.type === 'folder' || file.type === 'folder_up')  {
-        add(new Folder(file));
-      } else {
-        add(new File(file));
+      if (!file.destroyed) {
+        file.relpath = path.join(dirPath, file.name);
+        file.resource_path = path.join('/data', file.relpath);
+        if (file.type === 'image') {
+          add(new ImageFile(file));
+        } else if (file.type === 'video') {
+          add(new VideoFile(file));
+        } else if (file.type === 'folder' || file.type === 'folder_up')  {
+          add(new Folder(file));
+        } else {
+          add(new File(file));
+        }
       }
     });
     if (dirPath !== '.') { // Add a 'go up' folder ('..') if the user is not in the game root folder.
@@ -199,7 +201,11 @@ app.ticker.add(function(delta) {
   // Destroy all files that have been damaged too badly
   _.each(app.files.children, function(file) {
     if (file) {
-      file.lifetimeTick(delta);
+      var destroyed = file.lifetimeTick(delta);
+      if (destroyed) {
+        // since we still have a reference to the file, we can capture its filename before it will get garbage collected later.
+        socket.emit('destroyedFile', file.filedetails.relpath);
+      }
     }
   });
 

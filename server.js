@@ -23,6 +23,9 @@ if (_.isString(argv.root)) {
 GAME_ROOT = path.resolve(GAME_ROOT);
 console.log("Game root is", GAME_ROOT);
 
+// Game state:
+var destroyedFiles = new Set();
+
 /*
 REST API; /data/* endpoint.
 This endpoint either:
@@ -59,12 +62,14 @@ router.get('/data/:subpath*', function (ctx, next) {
             }
             return {
               name: entry_name,
-              type: filetype
+              type: filetype,
+              destroyed: destroyedFiles.has(path.relative(GAME_ROOT, entry_path).replace(/\\/gi, '/'))
             }
           } else { // For folders: just return details about the folder
             return {
               name: entry_name,
-              type: 'folder'
+              type: 'folder',
+              destroyed: false
             }
           }
         } catch (e) {
@@ -76,7 +81,7 @@ router.get('/data/:subpath*', function (ctx, next) {
         contents: contents,
         absolute_path: absolute_path,
         is_root: absolute_path === GAME_ROOT
-      }
+      };
       ctx.body = JSON.stringify(details);
       ctx.contentType = "application/json";
       resolve();
@@ -88,7 +93,7 @@ router.get('/data/:subpath*', function (ctx, next) {
         ctx.contentType = "video/ogg";
         command.on('end', function() {
           console.log("Done converting video.");
-        })
+        });
         command.on('progress', function(progress) {
           console.log('Processing: ' + progress.percent + '% done');
         });
@@ -140,6 +145,13 @@ io.on('connection', function(client){
   client.on('message', function(x){
     console.log("MSG", x)
   })
+  client.on('destroyedFile', function(filepath){
+    console.log("DESTROYED", filepath)
+    if (_.isString(filepath)) {
+      destroyedFiles.add(filepath);
+      console.log(destroyedFiles);
+    }
+  });
   client.emit('hostname', os.hostname()); // Whenever a Client connects, send them the hostname of the system.
 
   setTimeout(function(){
