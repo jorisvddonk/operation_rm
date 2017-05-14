@@ -1,6 +1,9 @@
 import _ from 'lodash';
 const PIXI = require('pixi.js');
 
+/*
+Game object: a parallax layer,. Used to implement the pretty background in the game.
+*/
 export default class Parallaxlayer extends PIXI.Container {
   constructor(options) {
     super();

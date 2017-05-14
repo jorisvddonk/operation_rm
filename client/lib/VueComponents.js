@@ -1,5 +1,9 @@
 import Vue from 'vue';
 
+/*
+Vue.JS GUI components.
+*/
+
 var loadavg = {
   props: ['load'],
   template: '#loadavg'

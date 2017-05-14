@@ -1,6 +1,9 @@
 import _ from 'lodash';
 const PIXI = require('pixi.js');
 
+/*
+Game utility object: Shooter. Essentially a bullet emitter...
+*/
 export default class Shooter {
   constructor(shootRate, spawnFunc) {
     this.shootRate = shootRate;

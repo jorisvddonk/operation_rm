@@ -1,6 +1,9 @@
 import _ from 'lodash';
 const PIXI = require('pixi.js');
 
+/*
+Game object: A simple Bullet that moves across the playing field...
+*/
 export default function(x, y, vx, vy, direction) {
   var container = new PIXI.Container();
   var sprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/bullet.png"));

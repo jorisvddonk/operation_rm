@@ -2,6 +2,9 @@ import _ from 'lodash';
 import File from './File';
 const PIXI = require('pixi.js');
 
+/*
+Game object: an image file on the user's filesytem.
+*/
 export default class ImageFile extends File {
   constructor(options) {
     super(options);

@@ -15,6 +15,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const lwip = require('lwip');
 const argv = require('yargs').argv;
 
+// Set the GAME ROOT to the root Operation RM game directory or to a custom path specified by the user.
 var GAME_ROOT = __dirname;
 if (_.isString(argv.root)) {
   GAME_ROOT = argv.root;
@@ -22,6 +23,13 @@ if (_.isString(argv.root)) {
 GAME_ROOT = path.resolve(GAME_ROOT);
 console.log("Game root is", GAME_ROOT);
 
+/*
+REST API; /data/* endpoint.
+This endpoint either:
+1) Returns data (filenames, filetypes) about folders
+2) Transcodes and streams video files
+3) Resizes and serves image files
+*/
 router.get('/data/:subpath*', function (ctx, next) {
   return new Promise(function(resolve, reject) {
     if (!ctx.params.subpath) {
@@ -33,12 +41,12 @@ router.get('/data/:subpath*', function (ctx, next) {
     } catch (e) {
       resolve();
     }
-    if (stats.isDirectory()) {
+    if (stats.isDirectory()) { // For folders: return folder content
       var contents = fs.readdirSync(pth);
       contents = _.compact(_.map(contents, function(entry_name) {
         try {
           var entry_path = path.join(pth, entry_name);
-          if (fs.lstatSync(entry_path).isFile()) {
+          if (fs.lstatSync(entry_path).isFile()) { // For files: determine the filetype and return these details about the file
             var filetype = fileType(readChunk.sync(entry_path, 0, 100));
             if (filetype !== null) {
               if (filetype.mime.startsWith('video')) {
@@ -53,7 +61,7 @@ router.get('/data/:subpath*', function (ctx, next) {
               name: entry_name,
               type: filetype
             }
-          } else {
+          } else { // For folders: just return details about the folder
             return {
               name: entry_name,
               type: 'folder'
@@ -72,9 +80,9 @@ router.get('/data/:subpath*', function (ctx, next) {
       ctx.body = JSON.stringify(details);
       ctx.contentType = "application/json";
       resolve();
-    } else if (stats.isFile()) {
+    } else if (stats.isFile()) { // For files:
       var filetype = fileType(readChunk.sync(pth, 0, 100));
-      if (filetype !== null && filetype.mime.startsWith('video')) {
+      if (filetype !== null && filetype.mime.startsWith('video')) { // Video files are transcoded and streamed
         ctx.body = stream.PassThrough();
         var command = ffmpeg(pth).noAudio().size('50x?').videoFilters('setpts=0.1*PTS').fps(10).format('ogv').output(ctx.body);
         ctx.contentType = "video/ogg";
@@ -91,7 +99,7 @@ router.get('/data/:subpath*', function (ctx, next) {
         });
         command.run();
         resolve();
-      } else if (filetype !== null && filetype.mime.startsWith('image')) {
+      } else if (filetype !== null && filetype.mime.startsWith('image')) { // Image files are resized and served
         ctx.contentType = filetype.mime;
         try {
           lwip.open(pth, function(err, image) {
@@ -118,10 +126,12 @@ router.get('/data/:subpath*', function (ctx, next) {
   });
 });
 
-app.use(koaStatic('client'));
-app.use(router.routes());
+// Setup the Koa app
+app.use(koaStatic('client')); // serve Client files
+app.use(router.routes()); // Use REST API routes
 app.use(router.allowedMethods());
 
+// Setup Socket.IO server
 const server = http.createServer(app.callback());
 const io = require('socket.io')(server);
 io.on('connection', function(client){
@@ -130,16 +140,17 @@ io.on('connection', function(client){
   client.on('message', function(x){
     console.log("MSG", x)
   })
-  client.emit('hostname', os.hostname());
+  client.emit('hostname', os.hostname()); // Whenever a Client connects, send them the hostname of the system.
 
   setTimeout(function(){
     io.to('players').send('Test!');
   }, 1000);
 });
-setInterval(function(){
+setInterval(function(){ // Periodically send load average and free memory
   io.to('players').emit('loadavg', os.loadavg()).emit('freemem', os.freemem());
 }, 1000);
 
+// Actually initialize the server!
 var startServer = function() {
   console.log("Starting server...");
   server.listen(8099, function() {

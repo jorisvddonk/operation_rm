@@ -16,7 +16,7 @@ The goal of the game is simple: remove as many files as possible by destroying t
 
 ## Controls
 
-`Arrow keys` or `W/A/S/D` to move your spaceship around. `Space` to shoot.
+`Arrow keys` or `W/A/S/D` to move your spaceship around. `Space` to shoot. Shoot files to destroy them. Touch folders to explore them.
 
 ## Cool features
 

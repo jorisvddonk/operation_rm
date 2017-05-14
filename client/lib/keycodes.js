@@ -1,5 +1,8 @@
 import _ from 'lodash';
 
+/*
+Utility service which captures keyboard state.
+*/
 export default function(element, keycodes) {
   var aliases = {
     "KeyW": "ArrowUp",

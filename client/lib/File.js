@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import FileBase from './FileBase';
 const PIXI = require('pixi.js');
+
+/*
+Game object: A non-image, non-video file on a user's filesystem.
+*/
 export default class File extends FileBase {
   constructor(options) {
     super(options);

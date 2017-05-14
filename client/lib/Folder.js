@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import FileBase from './FileBase';
 const PIXI = require('pixi.js');
+
+/*
+Game object: a folder on the user's filesytem.
+*/
 export default class Folder extends FileBase {
   constructor(options) {
     super(options);
