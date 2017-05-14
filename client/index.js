@@ -12,20 +12,22 @@ import seedrandom from 'seedrandom';
 const PIXI = require('pixi.js');
 var path = require('path');
 
-var rootElement = document.getElementById('main');
-
+// Setup keyboard listener
 var keyState = keycodes(window, ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight", "Space"]);
 
-
+// Create PIXI Application
+// The PIXI Application is responsible for most of the game's workings and rendering.
 var app = new PIXI.Application(800, 600, {backgroundColor : 0x000000});
-rootElement.appendChild(app.view);
+document.getElementById('main').appendChild(app.view);
 window.app = app;
+
+// Setup layers containing game objects
 app.topLayer = new PIXI.Container();
 app.middleLayer = new PIXI.Container();
 app.bottomLayer = new PIXI.Container();
 app.bullets = new PIXI.Container();
 app.files = new PIXI.Container();
-
+// Layers added later are rendered above layers added earlier
 app.stage.addChild(app.bottomLayer);
 app.stage.addChild(app.middleLayer);
 app.stage.addChild(app.bullets);
@@ -215,13 +217,13 @@ socket.on('connect', function(x){
   console.log("Connected to Socket.IO backend"); 
 });
 socket.on('message', function(data){console.log("MSG", data)});
-socket.on('loadavg', function(data){
+socket.on('loadavg', function(data){ // update load average display
   vue_app.load = data;
 });
-socket.on('hostname', function(data){
+socket.on('hostname', function(data){ // update hostname display
   vue_app.hostname = data;
 });
-socket.on('freemem', function(data){
+socket.on('freemem', function(data){ // update free memory display
   vue_app.freemem = data;
 });
 socket.on('disconnect', function(){
@@ -229,46 +231,29 @@ socket.on('disconnect', function(){
 });
 
 
+// Setup VueJS components
 Vue.component('loadavg', {
   props: ['load'],
-  template: '#loadavg',
-  data: function(){
-    return {
-    }
-  }
+  template: '#loadavg'
 });
 Vue.component('hostname', {
   props: ['hostname'],
-  template: '#hostname',
-  data: function(){
-    return {
-    }
-  }
+  template: '#hostname'
 });
 Vue.component('freemem', {
   props: ['freemem'],
-  template: '#freemem',
-  data: function(){
-    return {
-    }
-  }
+  template: '#freemem'
 });
 Vue.component('currentfolder', {
   props: ['currentfolder', 'isgameroot'],
-  template: '#currentfolder',
-  data: function(){
-    return {
-    }
-  }
+  template: '#currentfolder'
 });
 Vue.component('radar', {
   props: ['files', 'shipposition'],
-  template: '#radar',
-  data: function(){
-    return {
-    }
-  }
+  template: '#radar'
 });
+// Setup VueJS application.
+// The VueJS application is responsible for rendering various widgets on screen (radar, hostname, load average, etc.)
 var vue_app = new Vue({
   el: '#vue',
   data: {
