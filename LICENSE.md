@@ -6,6 +6,7 @@ The following authors have made art assets which are used in Operation RM:
 
 * [BTAxis; art assets for Naev. Public domain.](https://github.com/bobbens/naev/blob/master/dat/gfx/ARTWORK_LICENSE) (client/assets/parallax_1_0.png)
 * [Daniel Cook; art assets for Tyrian. Permissive license.](http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html) (client/assets/ship.png)
-* Joris van de Donk; variosu art assets. Public domain. (everything else in client/assets)
+* [Steve Schoger, heropatterns.com; background SVG pattern. CC BY-SA 4.0](http://www.heropatterns.com/)
+* Joris van de Donk; various art assets. Public domain. (everything else in client/assets)
 
 All assets from the 'demo' folder are in the Public Domain and were retrieved from pixabay.com or pexels.com
