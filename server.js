@@ -34,8 +34,8 @@ router.get('/data/:subpath*', function (ctx, next) {
       resolve();
     }
     if (stats.isDirectory()) {
-      var details = fs.readdirSync(pth);
-      details = _.compact(_.map(details, function(entry_name) {
+      var contents = fs.readdirSync(pth);
+      contents = _.compact(_.map(contents, function(entry_name) {
         try {
           var entry_path = path.join(pth, entry_name);
           if (fs.lstatSync(entry_path).isFile()) {
@@ -63,6 +63,12 @@ router.get('/data/:subpath*', function (ctx, next) {
           return undefined; // if the resource is busy or locked, ignore it completely.
         }
       }));
+      var absolute_path = path.resolve(pth);
+      var details = {
+        contents: contents,
+        absolute_path: absolute_path,
+        is_root: absolute_path === GAME_ROOT
+      }
       ctx.body = JSON.stringify(details);
       ctx.contentType = "application/json";
       resolve();

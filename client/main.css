@@ -99,6 +99,11 @@ body {
     margin-right: 5px;
     color: rgba(255,255,255,0.3);
 }
+.currentfolder.in-game-root:after {
+    content: '(game root)';
+    margin-left: 5px;
+    color: rgba(255,255,255,0.3);
+}
 
 .radar {
     width: 200px;

@@ -10,7 +10,7 @@
     </script>
 
     <script type="text/x-template" id="currentfolder">
-      <span class="currentfolder float-left">{{currentfolder}}</span>
+      <span class="currentfolder float-left" v-bind:class="{'in-game-root': isgameroot}">{{currentfolder}}</span>
     </script>
 
     <script type="text/x-template" id="loadavg">
@@ -31,7 +31,7 @@
     <div id="main" style="width:800px;height:600px;"></div>
     <div id="vue">
       <div class="top-left">
-        <currentfolder v-bind:currentfolder="currentfolder"></currentfolder>
+        <currentfolder v-bind:currentfolder="currentfolder" v-bind:isgameroot="isgameroot"></currentfolder>
       </div>
       <div class="top-right">
         <radar v-bind:files="files" v-bind:shipposition="shipposition"></radar>

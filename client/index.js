@@ -62,7 +62,7 @@ var add = function(thing) {
 }
 
 var enterDirectory = function(dirPath) {
-  vue_app.currentfolder = dirPath;
+  vue_app.currentfolder = '';
   app.files.removeChildren();
   app.ship.position.x = 0;
   app.ship.position.y = 0;
@@ -70,8 +70,10 @@ var enterDirectory = function(dirPath) {
   app.ship.state.velocity.y = 0;
   fetch('/data/' + dirPath).then(function(res){
     return res.json()
-  }).then(function(filelist){
-    _.each(filelist, function(file) {
+  }).then(function(details){
+    vue_app.currentfolder = details.absolute_path;
+    vue_app.isgameroot = details.is_root;
+    _.each(details.contents, function(file) {
       file.relpath = path.join(dirPath, file.name);
       file.resource_path = path.join('/data', file.relpath);
       if (file.type === 'image') {
@@ -252,7 +254,7 @@ Vue.component('freemem', {
   }
 });
 Vue.component('currentfolder', {
-  props: ['currentfolder'],
+  props: ['currentfolder', 'isgameroot'],
   template: '#currentfolder',
   data: function(){
     return {
@@ -274,6 +276,7 @@ var vue_app = new Vue({
     hostname: null,
     freemem: null,
     currentfolder: '',
+    isgameroot: true,
     number_of_files: 0,
     files: [],
     shipposition: {x: 0, y: 0} 
