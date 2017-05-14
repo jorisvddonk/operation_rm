@@ -43,33 +43,11 @@ addParallaxLayer("assets/parallax_2.png", 3);
 addParallaxLayer("assets/parallax_3.png", 2);
 addParallaxLayer("assets/parallax_4.png", 1);
 
-var addFile = function(options) {
-  var file = new File(options);
-  file.position.x = _.random(500);
-  file.position.y = _.random(500);
-  file.wire(app);
-  app.files.addChild(file);
-}
-var addFolder = function(options) {
-  var folder = new Folder(options);
-  folder.position.x = _.random(500);
-  folder.position.y = _.random(500);
-  folder.wire(app);
-  app.files.addChild(folder);
-}
-var addVideo = function(options) {
-  var file = new VideoFile(options);
-  file.position.x = _.random(500);
-  file.position.y = _.random(500);
-  file.wire(app);
-  app.files.addChild(file);
-}
-var addImage = function(options) {
-  var file = new ImageFile(options);
-  file.position.x = _.random(500);
-  file.position.y = _.random(500);
-  file.wire(app);
-  app.files.addChild(file);
+var add = function(thing) {
+  thing.position.x = _.random(500);
+  thing.position.y = _.random(500);
+  thing.wire(app);
+  app.files.addChild(thing);
 }
 
 var enterDirectory = function(dirPath) {
@@ -81,13 +59,13 @@ var enterDirectory = function(dirPath) {
       file.resource_path = path.join('/data', file.relpath);
       file.filename = file.name;
       if (file.type === 'image') {
-        addImage(file);
+        add(new ImageFile(file));
       } else if (file.type === 'video') {
-        addVideo(file);
+        add(new VideoFile(file));
       } else if (file.type === 'folder')  {
-        addFolder(file);
+        add(new Folder(file));
       } else {
-        addFile(file);
+        add(new File(file));
       }
     });
   });
