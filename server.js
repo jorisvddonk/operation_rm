@@ -12,6 +12,7 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
+const lwip = require('lwip');
 
 router.get('/data/:subpath*', function (ctx, next) {
   return new Promise(function(resolve, reject) {
@@ -61,9 +62,22 @@ router.get('/data/:subpath*', function (ctx, next) {
         command.run();
         resolve();
       } else if (filetype !== null && filetype.mime.startsWith('image')) {
-        ctx.body = fs.createReadStream(pth);
-        ctx.contentType = filetype.mime;
-        resolve();
+        lwip.open(pth, function(err, image) {
+          if (!err) {
+            image.batch().cover(54, 54).toBuffer('jpg', {}, function(err, buf){
+              if (!err) {
+                ctx.body = buf;
+                ctx.contentType = filetype.mime;
+              } else {
+                ctx.status = 500;
+              }
+              resolve();
+            })
+          } else {
+            ctx.status = 500;
+            resolve();
+          }
+        })
       }
     }
   });
