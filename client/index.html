@@ -5,7 +5,7 @@
     <script type="text/x-template" id="radar">
       <div class="radar float-right">
         <div class="blip blip-ship"></div>
-        <div class="blip" v-for="f in files" v-bind:class="'blip-' + f.filedetails.type" v-bind:style="{top: 100 - ((ship.position.y - f.position.y) * 0.1) + 'px', left: 100 - ((ship.position.x - f.position.x) * 0.1) + 'px'}"></div>
+        <div class="blip" v-for="f in files" v-bind:class="'blip-' + f.type" v-bind:style="{top: 100 - ((shipposition.y - f.position.y) * 0.1) + 'px', left: 100 - ((shipposition.x - f.position.x) * 0.1) + 'px'}"></div>
       </div>
     </script>
 
@@ -34,7 +34,7 @@
         <currentfolder v-bind:currentfolder="currentfolder"></currentfolder>
       </div>
       <div class="top-right">
-        <radar v-bind:files="files" v-bind:ship="ship"></radar>
+        <radar v-bind:files="files" v-bind:shipposition="shipposition"></radar>
       </div>
       <div class="bottom-left">
         <hostname v-bind:hostname="hostname"></hostname>

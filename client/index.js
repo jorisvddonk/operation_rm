@@ -50,10 +50,20 @@ var add = function(thing) {
   thing.position.y = Math.cos(angle) * distance;
   thing.wire(app);
   app.files.addChild(thing);
+  vue_app.files.push({ // Vue and PIXI don't work together very well (Vue's observables cause massive slowdowns), so we'll manually push the position and type of all files to VueJS.
+    position: {
+      x: thing.position.x,
+      y: thing.position.y,
+    },
+    type: thing.filedetails.type
+  });
 }
 
 var enterDirectory = function(dirPath) {
   vue_app.currentfolder = dirPath;
+  while (vue_app.files.length > 0) {
+    vue_app.files.pop();
+  }
   app.files.removeChildren();
   app.ship.position.x = 0;
   app.ship.position.y = 0;
@@ -125,6 +135,9 @@ app.ticker.add(function(delta) {
   // Update ship position
   ship.position.x += ship.state.velocity.x;
   ship.position.y += ship.state.velocity.y;
+  // Update ship position copy in the vue app
+  vue_app.shipposition.x = ship.position.x;
+  vue_app.shipposition.y = ship.position.y;
 
   // center ship in stage
   app.stage.pivot.x = ship.position.x - app.renderer.width*0.5;
@@ -244,7 +257,7 @@ Vue.component('currentfolder', {
   }
 });
 Vue.component('radar', {
-  props: ['files', 'ship'],
+  props: ['files', 'shipposition'],
   template: '#radar',
   data: function(){
     return {
@@ -258,8 +271,8 @@ var vue_app = new Vue({
     hostname: null,
     freemem: null,
     currentfolder: '',
-    files: app.files.children,
-    ship: app.ship
+    files: [],
+    shipposition: {x: 0, y: 0} 
   },
   mounted: function() {}
 });
