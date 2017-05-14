@@ -142,21 +142,12 @@ const io = require('socket.io')(server);
 io.on('connection', function(client){
   console.log("Received socketIO connection...")
   client.join('players');
-  client.on('message', function(x){
-    console.log("MSG", x)
-  })
   client.on('destroyedFile', function(filepath){
-    console.log("DESTROYED", filepath)
     if (_.isString(filepath)) {
       destroyedFiles.add(filepath);
-      console.log(destroyedFiles);
     }
   });
   client.emit('hostname', os.hostname()); // Whenever a Client connects, send them the hostname of the system.
-
-  setTimeout(function(){
-    io.to('players').send('Test!');
-  }, 1000);
 });
 setInterval(function(){ // Periodically send load average and free memory
   io.to('players').emit('loadavg', os.loadavg()).emit('freemem', os.freemem());

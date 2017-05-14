@@ -230,7 +230,6 @@ var socket = require('socket.io-client')(window.location.href);
 socket.on('connect', function(x){
   console.log("Connected to Socket.IO backend"); 
 });
-socket.on('message', function(data){console.log("MSG", data)});
 socket.on('loadavg', function(data){ // update load average display
   vue_app.load = data;
 });
