@@ -1,6 +1,6 @@
 _For decades, file operations have been handled by operating system kernels. These workhorses of modern society have silently prevented our civilization from regressing into anarchy. However, times have changed, and malware has nested itself deeply within our filesystems, preventing kernels from doing their job. Now it is **your** duty to recursively remove all files from your PC, and prevent a global apocalypse of epic proportions. Welcome to **Operation RM**, operator._
 
-(Note: Operation RM does not actually make any modifications to your filesystem ([yet?](#1)))
+(Note: Operation RM does not actually make any modifications to your filesystem ([yet?](https://github.com/jorisvddonk/operation_rm/issues/1)))
 
 # Running & developing the game
 
