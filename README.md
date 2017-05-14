@@ -2,6 +2,10 @@ _For decades, file operations have been handled by operating system kernels. The
 
 (Note: Operation RM does not actually make any modifications to your filesystem ([yet?](https://github.com/jorisvddonk/operation_rm/issues/1)))
 
+![screenshot depicting cleansing of a nasty virus](docs/media/screenshot.png)
+
+![video depicting cleansing of some nasty viruses](docs/media/gameplay.gif)
+
 # Running & developing the game
 
 First, ensure you have the following requirements installed:
