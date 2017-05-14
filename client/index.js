@@ -8,6 +8,7 @@ import ImageFile from './lib/ImageFile';
 import Bullet from './lib/Bullet';
 import Shooter from './lib/Shooter';
 import Vue from 'vue';
+import VueComponents from './lib/VueComponents'; // Vue components are added to the Vue instance.
 import seedrandom from 'seedrandom';
 const PIXI = require('pixi.js');
 var path = require('path');
@@ -231,27 +232,6 @@ socket.on('disconnect', function(){
 });
 
 
-// Setup VueJS components
-Vue.component('loadavg', {
-  props: ['load'],
-  template: '#loadavg'
-});
-Vue.component('hostname', {
-  props: ['hostname'],
-  template: '#hostname'
-});
-Vue.component('freemem', {
-  props: ['freemem'],
-  template: '#freemem'
-});
-Vue.component('currentfolder', {
-  props: ['currentfolder', 'isgameroot'],
-  template: '#currentfolder'
-});
-Vue.component('radar', {
-  props: ['files', 'shipposition'],
-  template: '#radar'
-});
 // Setup VueJS application.
 // The VueJS application is responsible for rendering various widgets on screen (radar, hostname, load average, etc.)
 var vue_app = new Vue({
