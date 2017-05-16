@@ -140,14 +140,33 @@ app.use(router.allowedMethods());
 const server = http.createServer(app.callback());
 const io = require('socket.io')(server);
 io.on('connection', function(client){
-  console.log("Received socketIO connection...")
+  console.log("Received socketIO connection...", client.id)
   client.join('players');
+  client.on('identify', function(id) {
+    client.identity = id;
+  });
   client.on('destroyedFile', function(filepath){
     if (_.isString(filepath)) {
       destroyedFiles.add(filepath);
     }
   });
   client.emit('hostname', os.hostname()); // Whenever a Client connects, send them the hostname of the system.
+  client.on('shipTick', function(x) {
+    if (client.identity) {
+      x.identity = client.identity;
+      client.to('players').broadcast.emit('shipTick', x);
+    } else {
+      console.log("Ignored shipTick because no identity!");
+    }
+  });
+  client.on('shipStateUpdate', function(x) {
+    if (client.identity) {
+      x.identity = client.identity;
+      client.to('players').broadcast.emit('shipStateUpdate', x);
+    } else {
+      console.log("Ignored shipStateUpdate because no identity!");
+    }
+  });
 });
 setInterval(function(){ // Periodically send load average and free memory
   io.to('players').emit('loadavg', os.loadavg()).emit('freemem', os.freemem());

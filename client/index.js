@@ -6,10 +6,11 @@ import Folder from './lib/Folder';
 import VideoFile from './lib/VideoFile';
 import ImageFile from './lib/ImageFile';
 import Bullet from './lib/Bullet';
-import Shooter from './lib/Shooter';
+import Ship from './lib/Ship';
 import Vue from 'vue';
 import VueComponents from './lib/VueComponents';
 import seedrandom from 'seedrandom';
+import cuid from 'cuid';
 const PIXI = require('pixi.js');
 var path = require('path');
 
@@ -27,11 +28,13 @@ app.middleLayer = new PIXI.Container();
 app.bottomLayer = new PIXI.Container();
 app.bullets = new PIXI.Container();
 app.files = new PIXI.Container();
+app.otherShips = new PIXI.Container();
 // Layers added later are rendered above layers added earlier
 app.stage.addChild(app.bottomLayer);
 app.stage.addChild(app.middleLayer);
 app.stage.addChild(app.bullets);
 app.stage.addChild(app.files);
+app.stage.addChild(app.otherShips);
 app.stage.addChild(app.topLayer);
 
 // Add background parallax layers
@@ -108,24 +111,10 @@ var enterFolder = function(dirPath) {
 };
 
 // Create the spaceship the user is going to fly!
-var ship = new PIXI.Sprite(PIXI.Texture.fromImage("assets/ship.png"));
-ship.position.x = 400;
-ship.position.y = 400;
-ship.anchor.set(0.5);
-ship.state = {
-  velocity: {
-    x: 0,
-    y: 0
-  }
-};
+var ship = new Ship();
+ship.wire(app);
 app.ship = ship;
 app.topLayer.addChild(ship);
-
-ship.shooter = new Shooter(3, function() {
-  var bullet = new Bullet(ship.position.x, ship.position.y, ship.state.velocity.x, ship.state.velocity.y, ship.rotation + Math.random() * 0.03 - 0.015);
-  bullet.wire(app);
-});
-ship.shooter.wire(app);
 
 app.ticker.add(function(delta) {
   // Handle keypresses for ship
@@ -143,13 +132,12 @@ app.ticker.add(function(delta) {
     ship.state.velocity.x -= Math.sin(ship.rotation+Math.PI) * -0.05;
     ship.state.velocity.y += Math.cos(ship.rotation+Math.PI) * -0.05;
   }
-  if (keyState.Space) {
-    ship.shooter.shoot();
-  }
+  ship.state.shooting = keyState.Space;
 
-  // Update ship position
-  ship.position.x += ship.state.velocity.x * delta;
-  ship.position.y += ship.state.velocity.y * delta;
+  // move my own ship
+  ship.movementTick(delta);
+  // shoot if shooting
+  ship.shootMaybe();
 
   // center ship in stage
   app.stage.pivot.x = ship.position.x - app.renderer.width*0.5;
@@ -220,14 +208,34 @@ app.ticker.add(function(delta) {
     }
   });
 
+  // Update other ships' positions
+  _.each(app.otherShips.children, function(otherShip) {
+    otherShip.movementTick(delta);
+    otherShip.shootMaybe();
+  });
+
   // Sync some stuff with the Vue.js UI app
   vue_app.shipposition.x = ship.position.x;
   vue_app.shipposition.y = ship.position.y;
   vue_app.number_of_files = app.files.children.length;
 });
 
+var getOtherShip = function(identity) {
+  var otherShip = _.find(app.otherShips.children, function(s){
+    return s.identity === identity;
+  });
+  if (!otherShip) {
+    otherShip = new Ship({identity: identity});
+    otherShip.wire(app);
+    app.otherShips.addChild(otherShip);
+  }
+  return otherShip;
+}
+
 var socket = require('socket.io-client')(window.location.href);
+var player_identity = cuid();
 socket.on('connect', function(x){
+  socket.emit('identify', player_identity);
   console.log("Connected to Socket.IO backend"); 
 });
 socket.on('loadavg', function(data){ // update load average display
@@ -242,6 +250,31 @@ socket.on('freemem', function(data){ // update free memory display
 socket.on('disconnect', function(){
   console.log("Disconnected from Socket.IO backend");
 });
+socket.on('message', function(x) {
+  console.log(x);
+});
+socket.on('shipTick', function(x) {
+  getOtherShip(x.identity).processTick(x);
+});
+socket.on('shipStateUpdate', function(x) {
+  getOtherShip(x.identity).processStateUpdate(x);
+});
+
+setInterval(function(){
+  if (socket.connected) {
+    socket.emit('shipTick', {
+      identity: player_identity,
+      x: ship.position.x,
+      y: ship.position.y,
+      rotation: ship.rotation,
+      velocity: {
+        x: ship.state.velocity.x,
+        y: ship.state.velocity.y
+      },
+      shooting: ship.state.shooting
+    })
+  }
+}, 100);
 
 // Setup VueJS application.
 // The VueJS application is responsible for rendering various widgets on screen (radar, hostname, load average, etc.)
