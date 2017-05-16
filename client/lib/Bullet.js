@@ -24,8 +24,8 @@ export default function(x, y, vx, vy, direction) {
     container.destroy();
   };
   container.movementTick = function(delta) {
-    container.position.x += container.state.velocity.x;
-    container.position.y += container.state.velocity.y;
+    container.position.x += container.state.velocity.x * delta;
+    container.position.y += container.state.velocity.y * delta;
   };
   container.lifetimeTick = function(delta) {
     container.state.lifetime -= delta;
