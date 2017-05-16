@@ -148,8 +148,8 @@ app.ticker.add(function(delta) {
   }
 
   // Update ship position
-  ship.position.x += ship.state.velocity.x;
-  ship.position.y += ship.state.velocity.y;
+  ship.position.x += ship.state.velocity.x * delta;
+  ship.position.y += ship.state.velocity.y * delta;
 
   // center ship in stage
   app.stage.pivot.x = ship.position.x - app.renderer.width*0.5;
