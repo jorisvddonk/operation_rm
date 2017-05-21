@@ -24,7 +24,7 @@ GAME_ROOT = path.resolve(GAME_ROOT);
 console.log("Game root is", GAME_ROOT);
 
 // Game state:
-var destroyedFiles = new Set();
+var fileHPs = new Map();
 
 /*
 REST API; /data/* endpoint.
@@ -60,10 +60,15 @@ router.get('/data/:subpath*', function (ctx, next) {
                 filetype = filetype.mime;
               }
             }
+            var fileHP = fileHPs.get(path.relative(GAME_ROOT, entry_path).replace(/\\/gi, '/'));
+            if (fileHP === undefined) {
+              fileHP = 10;
+            }
             return {
               name: entry_name,
               type: filetype,
-              destroyed: destroyedFiles.has(path.relative(GAME_ROOT, entry_path).replace(/\\/gi, '/'))
+              destroyed: fileHP <= 0,
+              hp: fileHP
             }
           } else { // For folders: just return details about the folder
             return {
@@ -145,9 +150,15 @@ io.on('connection', function(client){
   client.on('identify', function(id) {
     client.identity = id;
   });
-  client.on('destroyedFile', function(filepath){
+  client.on('hitFile', function(filepath){
     if (_.isString(filepath)) {
-      destroyedFiles.add(filepath);
+      var fileHP = fileHPs.get(filepath);
+      if (fileHP === undefined) {
+        fileHP = 10;
+      }
+      fileHP -= 1;
+      fileHPs.set(filepath, fileHP);
+      io.to('players').emit('fileHPUpdate', {filepath: filepath, hp: fileHP});
     }
   });
   client.emit('hostname', os.hostname()); // Whenever a Client connects, send them the hostname of the system.

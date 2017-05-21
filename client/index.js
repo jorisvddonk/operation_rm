@@ -174,6 +174,7 @@ app.ticker.add(function(delta) {
           if (dx < hitboxSize.width && dy < hitboxSize.height) {
             file.registerHit();
             bullet.markDeceased();
+            socket.emit('hitFile', file.filedetails.relpath);
           }
         });
       }
@@ -189,14 +190,10 @@ app.ticker.add(function(delta) {
   _.each(app.files.children, function(file) {
     file.gfxTick();
   });
-  // Destroy all files that have been damaged too badly
+  // Destroy all files (locally) that have been damaged too badly
   _.each(app.files.children, function(file) {
     if (file) {
-      var destroyed = file.lifetimeTick(delta);
-      if (destroyed) {
-        // since we still have a reference to the file, we can capture its filename before it will get garbage collected later.
-        socket.emit('destroyedFile', file.filedetails.relpath);
-      }
+      file.lifetimeTick(delta);
     }
   });
 
@@ -268,6 +265,14 @@ socket.on('shipTick', function(x) {
 });
 socket.on('shipStateUpdate', function(x) {
   getOtherShip(x.identity).processStateUpdate(x);
+});
+socket.on('fileHPUpdate', function(data) {
+  var file = _.find(app.files.children, function(file) {
+    return file.filedetails.relpath === data.filepath;
+  });
+  if (file !== undefined) {
+    file.updateHP(data.hp);
+  }
 });
 
 setInterval(function(){

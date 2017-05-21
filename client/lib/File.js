@@ -26,7 +26,7 @@ export default class File extends FileBase {
     this.addChild(this.damageSprites);
 
     this.state = {
-      hitpoints: 10
+      hitpoints: (options.hp !== undefined ? options.hp : 10)
     }
   }
 
@@ -58,7 +58,11 @@ export default class File extends FileBase {
   Register a hit on this file
   */
   registerHit() {
-    this.state.hitpoints -= 1;
+    // do nothing; hits are managed serverside and HP updates are communicated back to Client
+  }
+
+  updateHP(newHP) {
+    this.state.hitpoints = newHP;
   }
 
   getHitboxSize() {

@@ -18,4 +18,5 @@ export default class FileBase extends PIXI.Container {
   gfxTick (delta) {}
   lifetimeTick () {}
   registerHit() {}
+  updateHP() {}
 }
