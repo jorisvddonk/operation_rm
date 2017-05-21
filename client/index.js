@@ -221,6 +221,14 @@ app.ticker.add(function(delta) {
   vue_app.shipposition.x = ship.position.x;
   vue_app.shipposition.y = ship.position.y;
   vue_app.number_of_files = app.files.children.length;
+  vue_app.otherships = _.map(app.otherShips.children, function(ship) {
+    return {
+      position: {
+        x: ship.position.x,
+        y: ship.position.y
+      }
+    }
+  });
 });
 
 var getOtherShip = function(identity) {
@@ -291,6 +299,7 @@ var vue_app = new Vue({
     isgameroot: true,
     number_of_files: 0,
     files: [],
+    otherships: [],
     shipposition: {x: 0, y: 0} 
   },
   mounted: function() {},

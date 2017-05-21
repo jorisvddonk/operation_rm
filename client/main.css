@@ -123,6 +123,9 @@ body {
     top: 100px;
     left: 100px;
 }
+.radar .blip-othership {
+    border: 1px solid skyblue;
+}
 .radar .blip-folder, .radar .blip-folder_up {
     border: 1px solid lightyellow;
 }

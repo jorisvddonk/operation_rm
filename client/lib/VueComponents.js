@@ -25,7 +25,7 @@ var currentfolder = {
 };
 
 var radar = {
-  props: ['files', 'shipposition'],
+  props: ['files', 'shipposition', 'otherships'],
   template: '#radar'
 };
 

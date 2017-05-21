@@ -6,6 +6,7 @@
       <div class="radar float-right">
         <div class="blip blip-ship"></div>
         <div class="blip" v-for="f in files" v-bind:class="'blip-' + f.type" v-bind:style="{top: 100 - ((shipposition.y - f.position.y) * 0.03) + 'px', left: 100 - ((shipposition.x - f.position.x) * 0.03) + 'px'}"></div>
+        <div class="blip blip-othership" v-for="s in otherships" v-bind:style="{top: 100 - ((shipposition.y - s.position.y) * 0.03) + 'px', left: 100 - ((shipposition.x - s.position.x) * 0.03) + 'px'}"></div>
       </div>
     </script>
 
@@ -34,7 +35,7 @@
         <currentfolder v-bind:currentfolder="currentfolder" v-bind:isgameroot="isgameroot"></currentfolder>
       </div>
       <div class="top-right">
-        <radar v-bind:files="files" v-bind:shipposition="shipposition"></radar>
+        <radar v-bind:files="files" v-bind:otherships="otherships" v-bind:shipposition="shipposition"></radar>
       </div>
       <div class="bottom-left">
         <hostname v-bind:hostname="hostname"></hostname>
