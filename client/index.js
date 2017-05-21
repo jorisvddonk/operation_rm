@@ -284,7 +284,7 @@ setInterval(function(){
       shooting: ship.state.shooting
     })
   }
-}, 100);
+}, 1000/64);
 
 // Setup VueJS application.
 // The VueJS application is responsible for rendering various widgets on screen (radar, hostname, load average, etc.)
