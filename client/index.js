@@ -111,7 +111,8 @@ var enterFolder = function(dirPath) {
 };
 
 // Create the spaceship the user is going to fly!
-var ship = new Ship();
+var player_identity = cuid();
+var ship = new Ship({identity: player_identity});
 ship.wire(app);
 app.ship = ship;
 app.topLayer.addChild(ship);
@@ -165,15 +166,17 @@ app.ticker.add(function(delta) {
   _.each(app.bullets.children, function(bullet) {
     if (bullet) {
       bullet.movementTick(delta);
-      _.each(app.files.children, function(file) {
-        const dx = Math.abs(bullet.position.x - file.position.x);
-        const dy = Math.abs(bullet.position.y - file.position.y);
-        const hitboxSize = file.getHitboxSize();
-        if (dx < hitboxSize.width && dy < hitboxSize.height) {
-          file.registerHit();
-          bullet.markDeceased();
-        }
-      });
+      if (bullet.owner == player_identity) { // if this is this client's bullet, check hit detection!
+        _.each(app.files.children, function(file) {
+          const dx = Math.abs(bullet.position.x - file.position.x);
+          const dy = Math.abs(bullet.position.y - file.position.y);
+          const hitboxSize = file.getHitboxSize();
+          if (dx < hitboxSize.width && dy < hitboxSize.height) {
+            file.registerHit();
+            bullet.markDeceased();
+          }
+        });
+      }
     }
   });
   // Destroy all bullets that have 'deceased'
@@ -233,7 +236,6 @@ var getOtherShip = function(identity) {
 }
 
 var socket = require('socket.io-client')(window.location.href);
-var player_identity = cuid();
 socket.on('connect', function(x){
   socket.emit('identify', player_identity);
   console.log("Connected to Socket.IO backend"); 

@@ -52,7 +52,9 @@ export default class Ship extends PIXI.Sprite {
 
   wire (app) {
     this.shooter = new Shooter(3, () => {
+      // Note: the randomness in the bullet pattern is NOT synced between clients!
       var bullet = new Bullet(this.position.x, this.position.y, this.state.velocity.x, this.state.velocity.y, this.rotation + Math.random() * 0.03 - 0.015);
+      bullet.owner = this.identity;
       bullet.wire(app);
     });
     this.shooter.wire(app);
