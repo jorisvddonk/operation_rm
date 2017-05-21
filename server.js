@@ -150,6 +150,11 @@ io.on('connection', function(client){
   client.on('identify', function(id) {
     client.identity = id;
   });
+  client.on('disconnect', function() {
+    io.to('players').emit('clientDisconnected', {
+      identity: client.identity
+    });
+  });
   client.on('hitFile', function(filepath){
     if (_.isString(filepath)) {
       var fileHP = fileHPs.get(filepath);
@@ -162,10 +167,24 @@ io.on('connection', function(client){
     }
   });
   client.emit('hostname', os.hostname()); // Whenever a Client connects, send them the hostname of the system.
+  client.on('enterFolder', function(dirPath) {
+    client.to(client.gameroom).broadcast.emit('playerSwitchedFolder', {
+      identity: client.identity,
+      folder: dirPath
+    });
+    _.each(_.keys(client.rooms), function(room){
+      if (room.indexOf('gamefolder_') === 0) {
+        client.leave(room);
+      }
+    })
+    client.gameroom = 'gamefolder_' + dirPath;
+    client.join(client.gameroom);
+    client.emit('enteredFolder', dirPath);
+  });
   client.on('shipTick', function(x) {
     if (client.identity) {
       x.identity = client.identity;
-      client.to('players').broadcast.emit('shipTick', x);
+      client.to(client.gameroom).broadcast.emit('shipTick', x);
     } else {
       console.log("Ignored shipTick because no identity!");
     }
@@ -173,7 +192,7 @@ io.on('connection', function(client){
   client.on('shipStateUpdate', function(x) {
     if (client.identity) {
       x.identity = client.identity;
-      client.to('players').broadcast.emit('shipStateUpdate', x);
+      client.to(client.gameroom).broadcast.emit('shipStateUpdate', x);
     } else {
       console.log("Ignored shipStateUpdate because no identity!");
     }

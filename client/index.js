@@ -17,6 +17,9 @@ var path = require('path');
 // Setup keyboard listener
 var keyState = keycodes(window, ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight", "Space"]);
 
+// Setup socket
+var socket = require('socket.io-client')(window.location.href);
+
 // Create PIXI Application
 // The PIXI Application is responsible for most of the game's workings and rendering.
 var app = new PIXI.Application(800, 600, {backgroundColor : 0x000000});
@@ -80,6 +83,9 @@ var enterFolder = function(dirPath) {
   app.ship.position.y = 0;
   app.ship.state.velocity.x = 0;
   app.ship.state.velocity.y = 0;
+  socket.emit('enterFolder', dirPath);
+};
+socket.on('enteredFolder', function(dirPath) {
   fetch('/data/' + dirPath).then(function(res){
     return res.json()
   }).then(function(details){
@@ -108,7 +114,7 @@ var enterFolder = function(dirPath) {
       }));
     }
   });
-};
+});
 
 // Create the spaceship the user is going to fly!
 var player_identity = cuid();
@@ -240,7 +246,6 @@ var getOtherShip = function(identity) {
   return otherShip;
 }
 
-var socket = require('socket.io-client')(window.location.href);
 socket.on('connect', function(x){
   socket.emit('identify', player_identity);
   console.log("Connected to Socket.IO backend"); 
@@ -274,6 +279,15 @@ socket.on('fileHPUpdate', function(data) {
     file.updateHP(data.hp);
   }
 });
+var pruneShip = function(data) {
+  _.find(app.otherShips.children, function(ship) {
+    if (ship.identity === data.identity) {
+      ship.destroy();
+    }
+  });
+}
+socket.on('playerSwitchedFolder', pruneShip);
+socket.on('clientDisconnected', pruneShip);
 
 setInterval(function(){
   if (socket.connected) {
